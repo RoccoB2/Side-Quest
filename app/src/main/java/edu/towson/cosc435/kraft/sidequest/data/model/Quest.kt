@@ -11,5 +11,6 @@ data class Quest(
     val date: String,
     val time: String,
     val exp: DifficultyEnum,
-    val status: StatusEnum
+    val status: StatusEnum,
+    val header: String,
 )

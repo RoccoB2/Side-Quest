@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
+import edu.towson.cosc435.kraft.sidequest.ui.theme.MainScreen
 import edu.towson.cosc435.kraft.sidequest.ui.theme.SideQuestTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,36 +41,6 @@ enum class StatusEnum {
     pass, fail, pending
 }
 enum class DifficultyEnum {
-    easy, medium, hard
+    easy, medium, hard, unassigned
 }
-@Composable
-fun MainScreen(
-    quests: List<Quest>,
-    onComplete: (Quest) -> Unit,
-    onFail: (Quest) -> Unit
-    ){
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text(
-            text = "Side Quest",
-            fontSize = 35.sp,
-            modifier = Modifier.padding(30.dp)
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ){
-            Text(
-                text = "Current Quests",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(10.dp)
-            )
-        }
-        Column(){
-            LazyColumn {
-                items(Quest)
-            }
-        }
-    }
-}
+

@@ -7,7 +7,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import edu.towson.cosc435.kraft.sidequest.ui.newquest.NewQuestView
 import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListView
+import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListViewModel
 
 
 @Composable

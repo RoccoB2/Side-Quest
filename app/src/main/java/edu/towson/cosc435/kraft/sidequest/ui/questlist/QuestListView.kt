@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
 import java.util.logging.Filter
-
 @Composable
 fun QuestListView(
     quests: List<Quest>,
@@ -25,12 +24,11 @@ fun QuestListView(
         contentAlignment = Alignment.Center
     ) {
         Column() {
-            SearchBar(onFilter = onFilter)
             val config = LocalConfiguration.current
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 LazyColumn() {
                     items(quests) {quest ->
-                        QuestRow(quest, onToggle, onSelectQuest)
+                        QuestRow(quest, onToggle, onSelectedQuest)
                     }
                 }
             }

@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.*
 fun QuestRow(
     Quest: Quest,
     onToggle: (Quest) -> Unit,
-    onSelectQuest: (Quest) -> Unit,
+    onSelectedQuest: (Quest) -> Unit,
 )
 {
     Card(
