@@ -12,6 +12,7 @@ import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListView
 import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListViewModel
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun QuestsNavGraph(
     navController: NavHostController = rememberNavController()

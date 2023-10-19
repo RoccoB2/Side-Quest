@@ -1,11 +1,14 @@
 package edu.towson.cosc435.kraft.sidequest.ui.newquest
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -29,10 +32,11 @@ fun NewQuestView(
     vm: NewQuestViewModel = viewModel(),
     onAddQuest: (Quest) -> Unit
 ) {
-    LazyColumn(){
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().scrollable(
+                state = rememberScrollState(),
+                orientation = Orientation.Vertical)
         ){
             Text(
                 "Create New Quest",
@@ -110,7 +114,6 @@ fun NewQuestView(
                 }
             }
         }
-    }
 
 
 
