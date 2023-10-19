@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.SideQuestTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,15 +30,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    mainScreen()
+                    MainScreen()
                 }
             }
         }
     }
 }
-
+enum class StatusEnum {
+    pass, fail, pending
+}
+enum class DifficultyEnum {
+    easy, medium, hard
+}
 @Composable
-fun mainScreen(){
+fun MainScreen(
+    quests: List<Quest>,
+    onComplete: (Quest) -> Unit,
+    onFail: (Quest) -> Unit
+    ){
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,7 +68,7 @@ fun mainScreen(){
         }
         Column(){
             LazyColumn {
-
+                items(Quest)
             }
         }
     }
