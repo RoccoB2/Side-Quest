@@ -27,48 +27,77 @@ class NewQuestViewModel : ViewModel() {
         _category.value = category
     }
 
+    fun getCategory() : String {
+        return _category.value
+    }
+
     fun setDescription(description: String) {
         _description.value = description
+    }
+
+    fun getDescription() : String {
+        return _description.value
     }
 
     fun setDate(date: String) {
         _date.value = date
     }
 
+    fun getDate() : String {
+        return _date.value
+    }
+
     fun setTime(time: String) {
         _time.value = time
+    }
+
+    fun getTime() : String {
+        return _time.value
     }
 
     fun setExp(exp: DifficultyEnum) {
         _exp.value = exp
     }
 
+    fun getExp() : DifficultyEnum {
+        return _exp.value
+    }
+
     fun setStatus(status: StatusEnum) {
         _status.value = status
+    }
+
+    fun getStatus(status: StatusEnum) : StatusEnum {
+        return _status.value
     }
 
     fun setHeader(header: String) {
         _header.value = header
     }
 
+    fun getHeader() : String {
+        return _header.value
+    }
+
+
     fun validate(): Quest {
         if(category.value.isEmpty()) {
             throw Exception("Category name needed")
         }
-        if(description.value.isEmpty()) {
-            throw Exception("Description needed")
-        }
-        if(time.value.isEmpty()) {
-            throw Exception("time needed")
-        }
-        if(date.value.isEmpty()) {
-            throw Exception("Due date needed")
+//        if(description.value.isEmpty()) {
+//            throw Exception("Description needed")
+//        }
+//        if(time.value.isEmpty()) {
+//            throw Exception("time needed")
+//        }
+//        if(date.value.isEmpty()) {
+//            throw Exception("Due date needed")
+//        }
+        if(header.value.isEmpty()) {
+            throw Exception("Header needed")
         }
         if(exp.value == DifficultyEnum.unassigned) {
             throw Exception("Difficulty needed")
-        }
-        if(header.value.isEmpty()) {
-            throw Exception("Header needed")
         }
         return Quest("", category.value, description.value, date.value, time.value, exp.value, status.value, header.value)
     }
