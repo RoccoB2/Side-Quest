@@ -1,4 +1,4 @@
-package edu.towson.cosc435.kraft.sidequest.ui.questlist
+package edu.towson.cosc435.kraft.sidequest.ui.statsPage
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -8,9 +8,9 @@ import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 
-class QuestListViewModel: ViewModel() {
+class StatViewModel: ViewModel() {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf())
-    val quests: State<List<Quest>> = _quests
+    val stats: State<List<Quest>> = _quests
 
     private val _selected: MutableState<Quest?>
     val selectedQuest: State<Quest?>
@@ -25,16 +25,6 @@ class QuestListViewModel: ViewModel() {
 
     fun addQuest(quest: Quest) {
         _repository.addQuest(quest)
-        _quests.value = _repository.getQuests()
-    }
-
-    fun deleteQuest(quest: Quest) {
-        _repository.deleteQuest(quest)
-        _quests.value = _repository.getQuests()
-    }
-
-    fun toggleStatus(quest: Quest) {
-        _repository.toggleStatus(quest)
         _quests.value = _repository.getQuests()
     }
 

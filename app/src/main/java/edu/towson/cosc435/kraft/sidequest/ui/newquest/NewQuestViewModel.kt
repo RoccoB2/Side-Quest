@@ -84,15 +84,6 @@ class NewQuestViewModel : ViewModel() {
         if(category.value.isEmpty()) {
             throw Exception("Category name needed")
         }
-//        if(description.value.isEmpty()) {
-//            throw Exception("Description needed")
-//        }
-//        if(time.value.isEmpty()) {
-//            throw Exception("time needed")
-//        }
-//        if(date.value.isEmpty()) {
-//            throw Exception("Due date needed")
-//        }
         if(header.value.isEmpty()) {
             throw Exception("Header needed")
         }

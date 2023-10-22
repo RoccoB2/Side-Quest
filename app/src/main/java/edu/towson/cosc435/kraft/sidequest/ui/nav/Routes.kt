@@ -5,4 +5,6 @@ sealed class Routes( val route: String) {
 
     object AddQuest : Routes("addquest")
 
+    object Stats : Routes("stats")
+
 }

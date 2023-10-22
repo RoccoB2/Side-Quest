@@ -16,9 +16,8 @@ class QuestRepository : IQuestRepository {
     }
 
     override fun deleteQuest(quest: Quest) {
-        _quests = _quests.filter { q -> q.id != quest.id}
+        _quests = _quests.filter { q -> q.id != quest.id }
     }
-
     override fun toggleStatus(quest: Quest) {
         _quests = _quests.map { q ->
             if (q.id == quest.id) {

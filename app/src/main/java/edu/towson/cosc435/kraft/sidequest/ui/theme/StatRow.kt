@@ -19,10 +19,8 @@ import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 
 @Composable
-fun QuestRow(
+fun StatRow(
     quest: Quest,
-    onPassQuest: (Quest) -> Unit,
-    onDeleteQuest: (Quest) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -62,36 +60,20 @@ fun QuestRow(
                 Row(
                     modifier = Modifier.padding(top = 30.dp)
                 ) {
-                    Button(
-                        onClick = {
-                            val newQuest: Quest = Quest(quest.id, quest.category,quest.description,quest.date, quest.time,quest.exp,StatusEnum.pass, quest.header)
-                            onPassQuest(newQuest)
-                            onDeleteQuest(quest)
-                                  },
-                        colors = ButtonDefaults.buttonColors(Color(0xFF54DE79)), //green
-                        modifier = Modifier
-                            .padding(start = 15.dp, end = 5.dp)
-                            .width(90.dp)
-                            .height(45.dp)
-                    )
-                    {
-                        Text("Pass")
-                    }
-                    Button(
-                        onClick = {
-                            val newQuest: Quest = Quest(quest.id, quest.category,quest.description,quest.date, quest.time,quest.exp,StatusEnum.fail, quest.header)
-                            onPassQuest(newQuest)
-                            onDeleteQuest(quest)
-                                  },
-                        colors = ButtonDefaults.buttonColors(Color(0xFFDE5454)), //red
-                        modifier = Modifier
-                            .padding(start = 10.dp, end = 5.dp)
-                            .width(90.dp)
-                            .height(45.dp)
-                    )
-                    {
-                        Text("Fail")
-                    }
+                    if(quest.status==StatusEnum.pass)
+                        Text(
+                            "PASS",
+                            color = Color(0xFF54DE79), // green
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(15.dp)
+                        )
+                    else
+                        Text(
+                            "FAIL",
+                            color = Color(0xFFDE5454), // red
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(15.dp)
+                        )
                 }
 
             }
@@ -99,12 +81,4 @@ fun QuestRow(
     }
 }
 
-fun getDifficulty(difficulty: DifficultyEnum): String {
-    return when(difficulty){
-        DifficultyEnum.easy ->  "Easy"
-        DifficultyEnum.medium -> "Medium"
-        DifficultyEnum.hard ->  "Hard"
-        else -> {""}
-    }
 
-}

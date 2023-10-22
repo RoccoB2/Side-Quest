@@ -3,7 +3,9 @@ package edu.towson.cosc435.kraft.sidequest.ui.theme
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,6 +38,21 @@ private fun BottomNavBar(
     nav: NavHostController
 ) {
     NavigationBar() {
+        NavigationBarItem(
+            selected = nav.currentBackStackEntry?.destination?.route == Routes.AddQuest.route,
+            onClick = {
+                nav.navigate(Routes.Stats.route) {
+                    launchSingleTop = true
+                    popUpTo(Routes.Stats.route)
+                }
+            },
+            icon = {
+                Icon(Icons.Default.Person, "")
+            },
+            label = {
+                Text("Stats Page")
+            }
+        )
         NavigationBarItem(
             selected = nav.currentBackStackEntry?.destination?.route == Routes.QuestList.route,
             onClick = {

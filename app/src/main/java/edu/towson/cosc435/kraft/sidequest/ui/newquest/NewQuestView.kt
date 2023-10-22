@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,9 +47,11 @@ fun NewQuestView(
         var validForm by remember { mutableStateOf(true) }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().scrollable(
-                state = rememberScrollState(),
-                orientation = Orientation.Vertical)
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                //state = rememberScrollState(),
+                //orientation = Orientation.Vertical)
         ){
             Text(
                 "Create New Quest",
@@ -165,10 +168,13 @@ fun NewQuestView(
             Button(
                 onClick = {
                     validForm = formValidate(vm)
-
+                    if(validForm){
+                        val quest = vm.validate()
+                        onAddQuest(quest)
+                    }
                     },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(top =10.dp, start =10.dp, end = 10.dp, bottom = 100.dp)
             ){
                 Text("Submit")
             }

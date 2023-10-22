@@ -10,6 +10,8 @@ import androidx.navigation.compose.*
 import edu.towson.cosc435.kraft.sidequest.ui.newquest.NewQuestView
 import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListView
 import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListViewModel
+import edu.towson.cosc435.kraft.sidequest.ui.statsPage.StatView
+import edu.towson.cosc435.kraft.sidequest.ui.statsPage.StatViewModel
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -19,21 +21,26 @@ fun QuestsNavGraph(
 
 ) {
     val vm: QuestListViewModel = viewModel()
+    val vm2: StatViewModel = viewModel()
     NavHost(
         navController = navController,
         startDestination = Routes.QuestList.route
     ) {
         composable(Routes.QuestList.route) {
             val quests by vm.quests
-            val selectedQuest by vm.selectedQuest
             QuestListView(
                 quests,
-                selectedQuest,
-                onToggle=vm::toggleStatus,
-                onFilter=vm::filter,
-                onSelectedQuest=vm::selectQuest,
-                onAddQuest = {}
+                onDeleteQuest=vm::deleteQuest,
+                onPassQuest = {quest ->
+                    vm2.addQuest(quest)
+                    navController.navigate(Routes.Stats.route)
+                }
             )
+        }
+
+        composable(Routes.Stats.route) {
+            val stats by vm2.stats
+            StatView(stats)
         }
 
         composable(Routes.AddQuest.route) {
@@ -42,6 +49,7 @@ fun QuestsNavGraph(
                 navController.navigate(Routes.QuestList.route)
             })
         }
+
     }
 
 }
