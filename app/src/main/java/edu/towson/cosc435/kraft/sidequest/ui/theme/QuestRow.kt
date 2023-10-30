@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 
@@ -22,16 +23,20 @@ import edu.towson.cosc435.kraft.sidequest.StatusEnum
 fun QuestRow(
     quest: Quest,
     onPassQuest: (Quest) -> Unit,
-    onDeleteQuest: (Quest) -> Unit
+    onDeleteQuest: (Quest) -> Unit,
+    //onToggle: (Quest) -> Unit
 ) {
     Card(
+
         modifier = Modifier
             .padding(20.dp)
-            .clickable { }
-            .fillMaxWidth()
+            .clickable(){
+            }.fillMaxWidth()
             .height(140.dp)
     ){
-
+//        if(clicked) {
+//            cardDescription(quest = quest, onDismissRequest = {})
+//        }
         Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
         Row(
             modifier = Modifier.padding(start = 5.dp, end =5.dp, bottom = 5.dp),
@@ -107,4 +112,45 @@ fun getDifficulty(difficulty: DifficultyEnum): String {
         else -> {""}
     }
 
+}
+
+@Composable
+fun cardDescription(quest: Quest, onDismissRequest: () -> Unit) {
+    Dialog(onDismissRequest = {}) {
+        Card(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth()
+                .height(140.dp)
+        ){
+
+            Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
+            Row(
+                modifier = Modifier.padding(start = 5.dp, end =5.dp, bottom = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column() {
+//                Row(
+//                    modifier = Modifier.padding(5.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(quest.header, fontSize = 25.sp)
+//                }
+                    Row(
+                        modifier = Modifier.padding(top = 0.dp, start = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)
+
+                    }
+                    if (quest.date.isNotEmpty())
+                        Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                    if (quest.time.isNotEmpty())
+                        Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+
+                }
+            }
+        }
+    }
 }

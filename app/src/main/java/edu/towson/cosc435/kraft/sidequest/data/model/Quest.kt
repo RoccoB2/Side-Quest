@@ -5,7 +5,7 @@ import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import java.util.Date
 
 data class Quest(
-    val id: String,
+    val id: Int,
     val category: String,
     val description: String,
     val date: String,

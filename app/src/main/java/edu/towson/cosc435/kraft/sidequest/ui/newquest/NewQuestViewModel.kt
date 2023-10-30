@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
+import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 
 class NewQuestViewModel : ViewModel() {
@@ -23,6 +24,8 @@ class NewQuestViewModel : ViewModel() {
     val status: State<StatusEnum> = _status
     private val _header: MutableState<String> = mutableStateOf("")
     val header: State<String> = _header
+    private val _currentIndex: MutableState<Int> = mutableStateOf(0)
+    val currentIndex: State<Int> = _currentIndex
     fun setCategory(category: String) {
         _category.value = category
     }
@@ -80,6 +83,7 @@ class NewQuestViewModel : ViewModel() {
     }
 
 
+
     fun validate(): Quest {
         if(category.value.isEmpty()) {
             throw Exception("Category name needed")
@@ -90,6 +94,6 @@ class NewQuestViewModel : ViewModel() {
         if(exp.value == DifficultyEnum.unassigned) {
             throw Exception("Difficulty needed")
         }
-        return Quest("", category.value, description.value, date.value, time.value, exp.value, status.value, header.value)
+        return Quest(0, category.value, description.value, date.value, time.value, exp.value, status.value, header.value)
     }
 }

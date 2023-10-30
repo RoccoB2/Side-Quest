@@ -14,7 +14,8 @@ class QuestListViewModel: ViewModel() {
 
     private val _selected: MutableState<Quest?>
     val selectedQuest: State<Quest?>
-
+    private val _currentIndex: MutableState<Int> = mutableStateOf(0)
+    val currentIndex: State<Int> = _currentIndex
     private val _repository: IQuestRepository = QuestRepository()
 
     init {
@@ -36,6 +37,10 @@ class QuestListViewModel: ViewModel() {
     fun toggleStatus(quest: Quest) {
         _repository.toggleStatus(quest)
         _quests.value = _repository.getQuests()
+    }
+
+    fun toggleDescription(quest: Quest) {
+
     }
 
     fun filter(search: String) {
