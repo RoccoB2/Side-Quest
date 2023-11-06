@@ -4,10 +4,14 @@ import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.model.Level
 import java.lang.Math
+import kotlin.math.pow
 
 class LevelSystem: ILevelSystem {
-    var _level: Level = Level(1, 0, 3)
+    var _level: Level = Level(1, 0, 5)
     var expMultplier = 1
+    override fun getLevelObj(): Level{
+        return _level
+    }
     override fun getLevel(): Long {
         return _level.level
     }
@@ -24,17 +28,17 @@ class LevelSystem: ILevelSystem {
         val level: Double = _level.level.toDouble()
         when(difficulty){
             DifficultyEnum.easy -> {
-                _level.currentExp += (Math.pow(3*(level), 0.7) * expMultplier).toLong()
+                _level.currentExp += (3 * ((level).pow(0.7)) * expMultplier).toLong()
                 checkLevelUp()
             }
 
             DifficultyEnum.medium -> {
-                _level.currentExp += ((Math.pow(5*(level), 0.7) * expMultplier).toLong() * expMultplier)
+                _level.currentExp += (5 * ((level).pow(0.7)) * expMultplier).toLong()
                 checkLevelUp()
             }
 
             DifficultyEnum.hard -> {
-                _level.currentExp += ((Math.pow(9*(level), 0.7) * expMultplier).toLong() * expMultplier)
+                _level.currentExp += (9 * ((level).pow(0.7)) * expMultplier).toLong()
                 checkLevelUp()
             }
 
@@ -56,7 +60,7 @@ class LevelSystem: ILevelSystem {
 
     override fun calculateExpForNextLevel() {
         val level: Double = _level.level.toDouble()
-        _level.expTillLevelUp = (Math.pow(2*(level), 1.7) - 2).toLong()
+        _level.expTillLevelUp = (2 * ((level).pow(1.7)) - 2).toLong()
     }
 
 }

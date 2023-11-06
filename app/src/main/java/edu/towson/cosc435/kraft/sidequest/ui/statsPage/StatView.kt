@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
@@ -26,6 +27,9 @@ fun StatView(
         Column() {
             val config = LocalConfiguration.current
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Column {
+                    Text("Level: ${vm.getLevel()}")
+                }
                 LazyColumn() {
                     items(quests) {quest ->
                         StatRow(quest)

@@ -40,7 +40,7 @@ fun QuestsNavGraph(
 
         composable(Routes.Stats.route) {
             val stats by vm2.stats
-            StatView(stats)
+            StatView(stats, vm2)
         }
 
         composable(Routes.AddQuest.route) {
