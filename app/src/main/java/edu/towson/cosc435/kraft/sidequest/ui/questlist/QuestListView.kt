@@ -8,9 +8,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
-import java.util.logging.Filter
+import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRowViewModel
+
 @Composable
 fun QuestListView(
     quests: List<Quest>,
@@ -25,10 +27,12 @@ fun QuestListView(
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 LazyColumn() {
                     items(quests) {quest ->
-                        QuestRow(quest, onPassQuest, onDeleteQuest)
+                        val vm: QuestRowViewModel = viewModel()
+                        QuestRow(quest, onPassQuest, onDeleteQuest, vm)
                     }
                 }
             }
         }
     }
 }
+

@@ -11,27 +11,37 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
+import kotlinx.coroutines.launch
+
 
 @Composable
 fun QuestRow(
     quest: Quest,
     onPassQuest: (Quest) -> Unit,
     onDeleteQuest: (Quest) -> Unit,
-    //onToggle: (Quest) -> Unit
+    vm: QuestRowViewModel
 ) {
+//    val vm: QuestRowViewModel = viewModel()
+    if(vm.getOpenDialog())
+        cardDescription(quest = quest, vm)
     Card(
-
         modifier = Modifier
             .padding(20.dp)
-            .clickable(){
-            }.fillMaxWidth()
+            .clickable(onClick = {
+                vm.setOpenDialog(true)
+            })
+            .fillMaxWidth()
             .height(140.dp)
     ){
 //        if(clicked) {
@@ -115,8 +125,12 @@ fun getDifficulty(difficulty: DifficultyEnum): String {
 }
 
 @Composable
-fun cardDescription(quest: Quest, onDismissRequest: () -> Unit) {
-    Dialog(onDismissRequest = {}) {
+fun cardDescription(quest: Quest, vm: QuestRowViewModel) {
+    val check: Boolean = true
+    Dialog(onDismissRequest = {
+        vm.getOpenDialog()
+        vm.setOpenDialog(!vm.getOpenDialog())
+    }) {
         Card(
             modifier = Modifier
                 .padding(20.dp)
