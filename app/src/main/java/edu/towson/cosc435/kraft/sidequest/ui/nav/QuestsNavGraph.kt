@@ -30,11 +30,14 @@ fun QuestsNavGraph(
             val quests by vm.quests
             QuestListView(
                 quests,
-                onDeleteQuest=vm::deleteQuest,
-                onPassQuest = {quest ->
+                onDeleteQuest= vm::deleteQuest,
+                onPassQuest = { quest ->
                     vm2.addQuest(quest)
                     navController.navigate(Routes.Stats.route)
-                }
+                },
+                selectQuest = vm::selectQuest,
+                isQuestSelected = vm::isQuestSelected,
+                getSelectedQuest = vm::getSelectedQuest
             )
         }
 

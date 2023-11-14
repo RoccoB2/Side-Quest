@@ -11,13 +11,15 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
-import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRowViewModel
 
 @Composable
 fun QuestListView(
     quests: List<Quest>,
     onPassQuest: (Quest) -> Unit,
-    onDeleteQuest: (Quest) -> Unit
+    onDeleteQuest: (Quest) -> Unit,
+    selectQuest: (Quest?) -> Unit,
+    isQuestSelected: () -> Boolean,
+    getSelectedQuest: () -> Quest?
 ) {
     Box(
         contentAlignment = Alignment.Center
@@ -27,8 +29,7 @@ fun QuestListView(
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 LazyColumn() {
                     items(quests) {quest ->
-                        val vm: QuestRowViewModel = viewModel()
-                        QuestRow(quest, onPassQuest, onDeleteQuest, vm)
+                        QuestRow(quest, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest)
                     }
                 }
             }

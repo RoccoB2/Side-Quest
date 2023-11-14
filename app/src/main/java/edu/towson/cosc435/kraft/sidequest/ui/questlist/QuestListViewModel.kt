@@ -18,6 +18,7 @@ class QuestListViewModel: ViewModel() {
     val currentIndex: State<Int> = _currentIndex
     private val _repository: IQuestRepository = QuestRepository()
 
+
     init {
         _quests.value = _repository.getQuests()
         _selected = mutableStateOf(null)
@@ -47,8 +48,16 @@ class QuestListViewModel: ViewModel() {
         _quests.value = _repository.getQuests().filter { a -> a.description.contains(search, true)}
     }
 
-    fun selectQuest(quest: Quest) {
+    fun selectQuest(quest: Quest?) {
         _selected.value = quest
+    }
+
+    fun isQuestSelected(): Boolean{
+        return  _selected.value != null
+    }
+
+    fun getSelectedQuest(): Quest?{
+        return _selected.value
     }
 
 }

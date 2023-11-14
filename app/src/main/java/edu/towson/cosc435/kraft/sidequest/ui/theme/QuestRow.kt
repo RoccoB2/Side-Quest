@@ -30,16 +30,17 @@ fun QuestRow(
     quest: Quest,
     onPassQuest: (Quest) -> Unit,
     onDeleteQuest: (Quest) -> Unit,
-    vm: QuestRowViewModel
+    selectQuest: (Quest?) -> Unit,
+    isQuestSelected: () -> Boolean,
+    getSelectedQuest: () -> Quest?
 ) {
-//    val vm: QuestRowViewModel = viewModel()
-    if(vm.getOpenDialog())
-        cardDescription(quest = quest, vm)
+    if(isQuestSelected())
+        cardDescription(selectQuest, isQuestSelected, getSelectedQuest())
     Card(
         modifier = Modifier
             .padding(20.dp)
             .clickable(onClick = {
-                vm.setOpenDialog(true)
+                selectQuest(quest)
             })
             .fillMaxWidth()
             .height(140.dp)
@@ -125,11 +126,14 @@ fun getDifficulty(difficulty: DifficultyEnum): String {
 }
 
 @Composable
-fun cardDescription(quest: Quest, vm: QuestRowViewModel) {
-    val check: Boolean = true
+fun cardDescription(
+    selectQuest: (Quest?) -> Unit,
+    isQuestSelected: () -> Boolean,
+    quest: Quest?
+) {
     Dialog(onDismissRequest = {
-        vm.getOpenDialog()
-        vm.setOpenDialog(!vm.getOpenDialog())
+        selectQuest(null)
+        isQuestSelected()
     }) {
         Card(
             modifier = Modifier
@@ -138,7 +142,7 @@ fun cardDescription(quest: Quest, vm: QuestRowViewModel) {
                 .height(140.dp)
         ){
 
-            Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
+            Text(quest!!.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
             Row(
                 modifier = Modifier.padding(start = 5.dp, end =5.dp, bottom = 5.dp),
                 verticalAlignment = Alignment.CenterVertically,
