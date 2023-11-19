@@ -3,7 +3,6 @@ package edu.towson.cosc435.kraft.sidequest.data.impl
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.model.Level
-import java.lang.Math
 import kotlin.math.pow
 
 class LevelSystem: ILevelSystem {

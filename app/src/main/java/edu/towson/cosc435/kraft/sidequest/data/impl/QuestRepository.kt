@@ -38,6 +38,8 @@ class QuestRepository : IQuestRepository {
             } else {
                 q
             }
-        } as List<Quest>
+        } //as List<Quest>
     }
+
+
 }
