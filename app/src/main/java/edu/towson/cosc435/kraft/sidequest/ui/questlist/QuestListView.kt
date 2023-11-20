@@ -13,13 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.lifecycle.viewmodel.compose.viewModel
+import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
+import kotlin.reflect.KSuspendFunction1
 
 @Composable
 fun QuestListView(
     quests: List<Quest>,
+    onToggle: (Quest, StatusEnum) -> Unit,
     onPassQuest: (Quest) -> Unit,
     onDeleteQuest: (Quest) -> Unit,
     selectQuest: (Quest?) -> Unit,
@@ -45,7 +47,7 @@ fun QuestListView(
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 LazyColumn() {
                     items(quests) {quest ->
-                        QuestRow(quest, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest)
+                        QuestRow(quest, onToggle, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest)
                     }
                 }
             }

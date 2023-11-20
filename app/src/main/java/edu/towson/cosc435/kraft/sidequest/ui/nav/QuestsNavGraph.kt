@@ -1,7 +1,6 @@
 package edu.towson.cosc435.kraft.sidequest.ui.nav
 
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,7 +29,8 @@ fun QuestsNavGraph(
             val quests by vm.quests
             QuestListView(
                 quests,
-                onDeleteQuest= vm::deleteQuest,
+                onToggle = vm::toggleStatus,
+                onDeleteQuest = vm::deleteQuest,
                 onPassQuest = { quest ->
                     vm2.addQuest(quest)
                     navController.navigate(Routes.Stats.route)

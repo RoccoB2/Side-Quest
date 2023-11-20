@@ -1,9 +1,12 @@
 package edu.towson.cosc435.kraft.sidequest.ui.statsPage
 
+import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
@@ -12,14 +15,20 @@ import edu.towson.cosc435.kraft.sidequest.data.impl.LevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Level
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
+import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class StatViewModel: ViewModel() {
+class StatViewModel(app: Application): AndroidViewModel(app) {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf())
     val stats: State<List<Quest>> = _quests
 
     private val _selected: MutableState<Quest?>
     val selectedQuest: State<Quest?>
-    private val _repository: IQuestRepository = QuestRepository()
+    private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
 
     private val _level: MutableState<Level>
     private val _levelSystem: ILevelSystem = LevelSystem()
@@ -39,8 +48,18 @@ class StatViewModel: ViewModel() {
     private val _longestStreak: MutableState<Int>
     private val _currentStreak: MutableState<Int>
 
+    private val _waiting: MutableState<Boolean>
+    val waiting: State<Boolean>
+
+    private val check: MutableState<Boolean>
     init {
-        _quests.value = _repository.getQuests()
+        viewModelScope.launch{
+            _quests.value = _repository.getQuests()
+            _quests.value = _quests.value.filter{ q -> q.status != StatusEnum.pending }
+        }
+        check = mutableStateOf(true)
+        _waiting = mutableStateOf(false)
+        waiting = _waiting
         _selected = mutableStateOf(null)
         _level = mutableStateOf(Level(1, 0, 5))
         getLevelObj()
@@ -59,8 +78,15 @@ class StatViewModel: ViewModel() {
     }
 
     fun addQuest(quest: Quest) {
-        _repository.addQuest(quest)
-        _quests.value = _repository.getQuests()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _waiting.value = true
+                delay(100)
+                _quests.value = _repository.getQuests()
+                _quests.value = _quests.value.filter { q -> q.status != StatusEnum.pending }
+                _waiting.value = false
+            }
+        }
         _totalQuests.value += 1
         if(quest.status == StatusEnum.pass) {
             // updates passed stats
@@ -98,7 +124,7 @@ class StatViewModel: ViewModel() {
     }
 
     fun filter(search: String) {
-        _quests.value = _repository.getQuests().filter { a -> a.description.contains(search, true)}
+        //_quests.value = _repository.getQuests().filter { a -> a.description.contains(search, true)}
     }
 
     fun selectQuest(quest: Quest) {
@@ -160,6 +186,14 @@ class StatViewModel: ViewModel() {
 
     fun getCurrentStreak(): Int {
         return _currentStreak.value
+    }
+
+    fun getCheck(): Boolean {
+        return check.value
+    }
+
+    fun setCheck() {
+        check.value = !check.value
     }
 
 }

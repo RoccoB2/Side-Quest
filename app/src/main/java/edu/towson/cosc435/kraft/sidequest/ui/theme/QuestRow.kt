@@ -1,6 +1,5 @@
 package edu.towson.cosc435.kraft.sidequest.ui.theme
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -14,26 +13,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.DialogWindowProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
-import kotlinx.coroutines.launch
+import kotlin.reflect.KSuspendFunction1
 
 
 @Composable
 fun QuestRow(
     quest: Quest,
+    onToggle: (Quest, StatusEnum) -> Unit,
     onPassQuest: (Quest) -> Unit,
     onDeleteQuest: (Quest) -> Unit,
     selectQuest: (Quest?) -> Unit,
@@ -79,6 +72,7 @@ fun QuestRow(
                     Button(
                         onClick = {
                             val newQuest: Quest = Quest(quest.id, quest.category,quest.description,quest.date, quest.time,quest.exp,StatusEnum.pass, quest.header)
+                            onToggle(quest, newQuest.status)
                             onPassQuest(newQuest)
                             onDeleteQuest(quest)
                                   },
@@ -94,6 +88,7 @@ fun QuestRow(
                     Button(
                         onClick = {
                             val newQuest: Quest = Quest(quest.id, quest.category,quest.description,quest.date, quest.time,quest.exp,StatusEnum.fail, quest.header)
+                            onToggle(quest, newQuest.status)
                             onPassQuest(newQuest)
                             onDeleteQuest(quest)
                                   },
@@ -135,7 +130,7 @@ fun CardDescription(
         isQuestSelected()
     }
     ) {
-//        (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(1f)
+//       (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(.5f)
 //        val dialogWindowProvider = LocalView.current.parent as? DialogWindowProvider
 //        dialogWindowProvider?.window?.setDimAmount(0.5f)
             Card(

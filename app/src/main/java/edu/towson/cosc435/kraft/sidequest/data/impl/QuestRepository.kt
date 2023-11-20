@@ -10,20 +10,21 @@ import java.util.Date
 
 class QuestRepository : IQuestRepository {
     private var _quests = listOf<Quest>()
-    private var _currentIndex: Int = 0
-    override fun getQuests(): List<Quest> {
+    //private var _currentIndex: Int = 0
+    override suspend fun getQuests(): List<Quest> {
         return _quests
     }
-    override fun addQuest(quest: Quest) {
-        val newQuest: Quest = Quest(_currentIndex+1, quest.category, quest.description, quest.date, quest.time, quest.exp, quest.status, quest.header)
-        _currentIndex +=1
+    override suspend fun addQuest(quest: Quest) {
+        val newQuest: Quest = Quest(0, quest.category, quest.description, quest.date, quest.time, quest.exp, quest.status, quest.header)
+        //_currentIndex +=1
        _quests = listOf(newQuest) + _quests
     }
 
-    override fun deleteQuest(quest: Quest) {
+
+    override suspend fun deleteQuest(quest: Quest) {
         _quests = _quests.filter { q -> q.id != quest.id }
     }
-    override fun toggleStatus(quest: Quest) {
+    override suspend fun toggleStatus(quest: Quest, status: StatusEnum) {
         _quests = _quests.map { q ->
             if (q.id == quest.id) {
                 if (quest.status == StatusEnum.pass) {
@@ -41,5 +42,8 @@ class QuestRepository : IQuestRepository {
         } //as List<Quest>
     }
 
+//    override fun updateQuestList(quests: List<Quest>){
+//        _quests = quests
+//    }
 
 }

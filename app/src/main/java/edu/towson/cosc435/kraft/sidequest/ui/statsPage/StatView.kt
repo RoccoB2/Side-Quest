@@ -1,6 +1,7 @@
 package edu.towson.cosc435.kraft.sidequest.ui.statsPage
 
 import android.content.res.Configuration
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,10 +36,12 @@ fun StatView(
     Box(
         contentAlignment = Alignment.Center
     ) {
-        Column() {
+        Column(
+            modifier = Modifier.padding(bottom = 75.dp)
+        ) {
             val config = LocalConfiguration.current
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                Column {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text(
                         text ="Level: ${vm.getLevel()}",
                         fontSize = 25.sp,
@@ -135,9 +140,7 @@ fun StatView(
                             modifier = Modifier.padding(10.dp)
                         )
                     }
-                }
-                LazyColumn() {
-                    items(quests) {quest ->
+                    quests.forEach{quest ->
                         StatRow(quest)
                     }
                 }
