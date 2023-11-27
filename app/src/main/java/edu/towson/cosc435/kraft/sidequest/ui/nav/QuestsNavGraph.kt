@@ -42,7 +42,7 @@ fun QuestsNavGraph(
         }
 
         composable(Routes.Stats.route) {
-            val stats by vm2.stats
+            val stats by vm2.quest
             StatView(stats, vm2)
         }
 

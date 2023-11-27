@@ -11,11 +11,15 @@ import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
+import edu.towson.cosc435.kraft.sidequest.data.IStatRepository
 import edu.towson.cosc435.kraft.sidequest.data.impl.LevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
+import edu.towson.cosc435.kraft.sidequest.data.impl.StatRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Level
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
+import edu.towson.cosc435.kraft.sidequest.data.model.StatDatabaseRepository
+import edu.towson.cosc435.kraft.sidequest.data.model.Stats
 import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,8 +28,10 @@ import kotlinx.coroutines.withContext
 
 class StatViewModel(app: Application): AndroidViewModel(app) {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf())
-    val stats: State<List<Quest>> = _quests
+    val quest: State<List<Quest>> = _quests
 
+    private val statRepos: IStatRepository = StatDatabaseRepository(getApplication())
+    var stat: MutableState<Stats> = mutableStateOf(Stats(0,0,0,0,0,0,0,0,0,0,0))
     private val _selected: MutableState<Quest?>
     val selectedQuest: State<Quest?>
     private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
@@ -33,20 +39,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     private val _level: MutableState<Level>
     private val _levelSystem: ILevelSystem = LevelSystem()
 
-    private val _passedEasy: MutableState<Int>
-    private val _passedMedium: MutableState<Int>
-    private val _passedHard: MutableState<Int>
-    private val _passedTotal: MutableState<Int>
-
-    private val _failedEasy: MutableState<Int>
-    private val _failedMedium: MutableState<Int>
-    private val _failedHard: MutableState<Int>
-    private val _failedTotal: MutableState<Int>
-
-    private val _totalQuests: MutableState<Int>
-
-    private val _longestStreak: MutableState<Int>
-    private val _currentStreak: MutableState<Int>
 
     private val _waiting: MutableState<Boolean>
     val waiting: State<Boolean>
@@ -56,6 +48,13 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         viewModelScope.launch{
             _quests.value = _repository.getQuests()
             _quests.value = _quests.value.filter{ q -> q.status != StatusEnum.pending }
+            if(statRepos.getStats() == null){
+                statRepos.addStats()
+                stat.value = statRepos.getStats()
+            } else {
+                stat.value = statRepos.getStats()
+            }
+
         }
         check = mutableStateOf(true)
         _waiting = mutableStateOf(false)
@@ -64,63 +63,84 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         _level = mutableStateOf(Level(1, 0, 5))
         getLevelObj()
         selectedQuest = _selected
-        _passedEasy = mutableStateOf(0)
-        _passedMedium = mutableStateOf(0)
-        _passedHard = mutableStateOf(0)
-        _passedTotal = mutableStateOf(0)
-        _failedEasy = mutableStateOf(0)
-        _failedMedium = mutableStateOf(0)
-        _failedHard = mutableStateOf(0)
-        _failedTotal = mutableStateOf(0)
-        _totalQuests = mutableStateOf(0)
-        _longestStreak = mutableStateOf(0)
-        _currentStreak = mutableStateOf(0)
     }
 
     fun addQuest(quest: Quest) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _waiting.value = true
-                delay(100)
+                delay(500)
                 _quests.value = _repository.getQuests()
                 _quests.value = _quests.value.filter { q -> q.status != StatusEnum.pending }
                 _waiting.value = false
             }
         }
-        _totalQuests.value += 1
-        if(quest.status == StatusEnum.pass) {
-            // updates passed stats
-            _passedTotal.value += 1
-            _currentStreak.value += 1
-            checkLongestStreak()
-            when(quest.exp){
-                DifficultyEnum.easy -> _passedEasy.value += 1
-
-                DifficultyEnum.medium -> _passedMedium.value += 1
-
-                DifficultyEnum.hard -> _passedHard.value += 1
-                
-                else -> {}
+            viewModelScope.launch {
+                statRepos.incrementtotalQuests(stat.value,stat.value.totalQuests+1)
+                delay(500)
             }
-            // updates level with new exp
-            _levelSystem.addExp(quest.exp)
-            getLevelObj()
-        }
-        else{
-            // updates failed stats
-            _failedTotal.value += 1
-            _currentStreak.value = 0
-            when(quest.exp){
-                DifficultyEnum.easy -> _failedEasy.value += 1
+            //_totalQuests.value += 1
+            if(quest.status == StatusEnum.pass) {
+                // updates passed stats
+                viewModelScope.launch {
+                    statRepos.incrementpassedTotal(stat.value,stat.value.passedTotal+1)
+                    delay(500)
+                }
+                viewModelScope.launch {
+                    statRepos.incrementcurrentStreak(stat.value,stat.value.currentStreak+1)
+                    delay(500)
+                }
+                viewModelScope.launch {
+                    when(quest.exp){
 
-                DifficultyEnum.medium -> _failedMedium.value += 1
+                        DifficultyEnum.easy -> statRepos.incrementpassedEasy(stat.value,stat.value.passedEasy+1)
 
-                DifficultyEnum.hard -> _failedHard.value += 1
+                        DifficultyEnum.medium -> statRepos.incrementpassedMedium(stat.value,stat.value.passedMedium+1)
 
-                else -> {}
+                        DifficultyEnum.hard -> statRepos.incrementpassedHard(stat.value,stat.value.passedHard+1)
+
+                        else -> {}
+
+                    }
+                    delay(500)
+                }
+                // updates level with new exp
+                _levelSystem.addExp(quest.exp)
+                getLevelObj()
             }
-            // todo - of updating level on fail?
-        }
+            else{
+                // updates failed stats
+                viewModelScope.launch {
+                    statRepos.incrementfailedTotal(stat.value,stat.value.failedTotal+1)
+                    delay(500)
+                }
+                viewModelScope.launch {
+                    statRepos.resetcurrentStreak(stat.value,0)
+                    delay(500)
+                }
+
+                viewModelScope.launch {
+                    when(quest.exp){
+                        DifficultyEnum.easy -> statRepos.incrementfailedEasy(stat.value,stat.value.failedEasy+1)
+
+                        DifficultyEnum.medium -> statRepos.incrementfailedMedium(stat.value,stat.value.failedMedium+1)
+
+                        DifficultyEnum.hard -> statRepos.incrementfailedHard(stat.value,stat.value.failedHard+1)
+
+                        else -> {}
+                    }
+                    delay(500)
+                }
+
+                // todo - of updating level on fail?
+            }
+            viewModelScope.launch {
+                stat.value = statRepos.getStats()
+                delay(500)
+            }
+
+
+
     }
 
     fun filter(search: String) {
@@ -135,57 +155,53 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         _level.value = _levelSystem.getLevelObj()
     }
 
-    fun checkLongestStreak(){
-        if(_currentStreak.value > _longestStreak.value)
-            _longestStreak.value = _currentStreak.value
-    }
 
     fun getLevel(): Long{
         return _level.value.level
     }
-    
+
     fun getPassEasy(): Int {
-        return _passedEasy.value
+        return stat.value.passedEasy//_passedEasy.value
     }
 
     fun getPassMedium(): Int {
-        return _passedMedium.value
+        return stat.value.passedMedium//_passedMedium.value
     }
 
     fun getPassHard(): Int {
-        return _passedHard.value
+        return stat.value.passedHard//_passedHard.value
     }
 
     fun getPassTotal(): Int {
-        return _passedTotal.value
+        return stat.value.passedTotal//_passedTotal.value
     }
 
     fun getFailEasy(): Int {
-        return _failedEasy.value
+        return stat.value.failedEasy//_failedEasy.value
     }
 
     fun getFailMedium(): Int {
-        return _failedMedium.value
+        return stat.value.failedMedium//_failedMedium.value
     }
 
     fun getFailHard(): Int {
-        return _failedHard.value
+        return stat.value.failedHard//_failedHard.value
     }
 
     fun getFailTotal(): Int {
-        return _failedTotal.value
+        return stat.value.failedTotal//_failedTotal.value
     }
 
     fun getTotalQuests(): Int {
-        return _totalQuests.value
+        return stat.value.totalQuests//_totalQuests.value
     }
 
     fun getLongestStreak(): Int {
-        return _longestStreak.value
+        return stat.value.longestStreak//_longestStreak.value
     }
 
     fun getCurrentStreak(): Int {
-        return _currentStreak.value
+        return stat.value.currentStreak//_currentStreak.value
     }
 
     fun getCheck(): Boolean {
