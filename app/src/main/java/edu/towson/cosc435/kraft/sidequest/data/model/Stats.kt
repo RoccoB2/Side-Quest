@@ -8,6 +8,7 @@ import edu.towson.cosc435.kraft.sidequest.StatusEnum
 @Entity(tableName = "stats")
 data class Stats (
     @PrimaryKey
+    val id: Int,
     var passedEasy: Int,
     var passedMedium: Int,
     var passedHard: Int,

@@ -3,17 +3,13 @@ package edu.towson.cosc435.kraft.sidequest.ui.questlist
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
-import edu.towson.cosc435.kraft.sidequest.data.QuestsDatabase
-import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class QuestListViewModel(app : Application): AndroidViewModel(app) {

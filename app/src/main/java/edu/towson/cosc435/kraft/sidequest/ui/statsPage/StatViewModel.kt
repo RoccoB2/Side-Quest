@@ -5,7 +5,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
@@ -13,16 +12,12 @@ import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.IStatRepository
 import edu.towson.cosc435.kraft.sidequest.data.impl.LevelSystem
-import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
-import edu.towson.cosc435.kraft.sidequest.data.impl.StatRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Level
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.StatDatabaseRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Stats
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,7 +26,7 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     val quest: State<List<Quest>> = _quests
 
     private val statRepos: IStatRepository = StatDatabaseRepository(getApplication())
-    var stat: MutableState<Stats> = mutableStateOf(Stats(0,0,0,0,0,0,0,0,0,0,0))
+    var stat: MutableState<Stats> = mutableStateOf(Stats(0, 0,0,0,0,0,0,0,0,0,0,0))
     private val _selected: MutableState<Quest?>
     val selectedQuest: State<Quest?>
     private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
@@ -69,78 +64,55 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _waiting.value = true
-                delay(500)
+//                delay(500)
                 _quests.value = _repository.getQuests()
                 _quests.value = _quests.value.filter { q -> q.status != StatusEnum.pending }
                 _waiting.value = false
             }
         }
-            viewModelScope.launch {
-                statRepos.incrementtotalQuests(stat.value,stat.value.totalQuests+1)
-                delay(500)
-            }
-            //_totalQuests.value += 1
-            if(quest.status == StatusEnum.pass) {
-                // updates passed stats
-                viewModelScope.launch {
-                    statRepos.incrementpassedTotal(stat.value,stat.value.passedTotal+1)
-                    delay(500)
-                }
-                viewModelScope.launch {
-                    statRepos.incrementcurrentStreak(stat.value,stat.value.currentStreak+1)
-                    delay(500)
-                }
-                viewModelScope.launch {
-                    when(quest.exp){
+        stat.value.totalQuests += 1
+        if(quest.status == StatusEnum.pass) {
+            // updates passed stats
+            stat.value.passedTotal += 1
+            stat.value.currentStreak += 1
+            if(stat.value.currentStreak > stat.value.longestStreak)
+                stat.value.longestStreak = stat.value.currentStreak
 
-                        DifficultyEnum.easy -> statRepos.incrementpassedEasy(stat.value,stat.value.passedEasy+1)
+            when(quest.exp){
 
-                        DifficultyEnum.medium -> statRepos.incrementpassedMedium(stat.value,stat.value.passedMedium+1)
+                DifficultyEnum.easy -> stat.value.passedEasy += 1
 
-                        DifficultyEnum.hard -> statRepos.incrementpassedHard(stat.value,stat.value.passedHard+1)
+                DifficultyEnum.medium -> stat.value.passedMedium += 1
 
-                        else -> {}
+                DifficultyEnum.hard -> stat.value.passedHard += 1
 
-                    }
-                    delay(500)
-                }
-                // updates level with new exp
-                _levelSystem.addExp(quest.exp)
-                getLevelObj()
-            }
-            else{
-                // updates failed stats
-                viewModelScope.launch {
-                    statRepos.incrementfailedTotal(stat.value,stat.value.failedTotal+1)
-                    delay(500)
-                }
-                viewModelScope.launch {
-                    statRepos.resetcurrentStreak(stat.value,0)
-                    delay(500)
-                }
-
-                viewModelScope.launch {
-                    when(quest.exp){
-                        DifficultyEnum.easy -> statRepos.incrementfailedEasy(stat.value,stat.value.failedEasy+1)
-
-                        DifficultyEnum.medium -> statRepos.incrementfailedMedium(stat.value,stat.value.failedMedium+1)
-
-                        DifficultyEnum.hard -> statRepos.incrementfailedHard(stat.value,stat.value.failedHard+1)
-
-                        else -> {}
-                    }
-                    delay(500)
-                }
-
-                // todo - of updating level on fail?
-            }
-            viewModelScope.launch {
-                stat.value = statRepos.getStats()
-                delay(500)
+                else -> {}
             }
 
+            // updates level with new exp
+            _levelSystem.addExp(quest.exp)
+            getLevelObj()
+        } else{
+            // updates failed stats
+            stat.value.failedTotal += 1
+            stat.value.currentStreak = 0
 
+            when(quest.exp){
+                DifficultyEnum.easy -> stat.value.failedEasy += 1
 
+                DifficultyEnum.medium -> stat.value.failedMedium += 1
+
+                DifficultyEnum.hard -> stat.value.failedHard += 1
+
+                else -> {}
+            }
+        }
+
+        viewModelScope.launch {
+            // update the statRepos value
+            statRepos.updateStats(stat.value)
+            stat.value = statRepos.getStats()
+        }
     }
 
     fun filter(search: String) {
