@@ -11,8 +11,8 @@ import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.IStatRepository
-import edu.towson.cosc435.kraft.sidequest.data.impl.LevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.model.Level
+import edu.towson.cosc435.kraft.sidequest.data.model.LevelDatabaseRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.StatDatabaseRepository
@@ -20,6 +20,7 @@ import edu.towson.cosc435.kraft.sidequest.data.model.Stats
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.pow
 
 class StatViewModel(app: Application): AndroidViewModel(app) {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf())
@@ -27,12 +28,15 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
 
     private val statRepos: IStatRepository = StatDatabaseRepository(getApplication())
     var stat: MutableState<Stats> = mutableStateOf(Stats(0, 0,0,0,0,0,0,0,0,0,0,0))
+
     private val _selected: MutableState<Quest?>
     val selectedQuest: State<Quest?>
     private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
 
-    private val _level: MutableState<Level>
-    private val _levelSystem: ILevelSystem = LevelSystem()
+//    private val _level: MutableState<Level>
+//    private val _levelSystem: ILevelSystem = LevelSystem()
+    private val levelRepos: ILevelSystem = LevelDatabaseRepository(getApplication())
+    var level: MutableState<Level> = mutableStateOf(Level(0,1, 0, 5))
 
 
     private val _waiting: MutableState<Boolean>
@@ -50,13 +54,20 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
                 stat.value = statRepos.getStats()
             }
 
+            if(levelRepos.getLevel() == null){
+                levelRepos.addLevel(level.value)
+                level.value = levelRepos.getLevel()
+            } else {
+                level.value = levelRepos.getLevel()
+            }
+
         }
         check = mutableStateOf(true)
         _waiting = mutableStateOf(false)
         waiting = _waiting
         _selected = mutableStateOf(null)
-        _level = mutableStateOf(Level(1, 0, 5))
-        getLevelObj()
+        //_level = mutableStateOf(Level(1, 0, 5))
+        //getLevelObj()
         selectedQuest = _selected
     }
 
@@ -88,10 +99,16 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
 
                 else -> {}
             }
-
+            newLevel(quest.exp)
             // updates level with new exp
-            _levelSystem.addExp(quest.exp)
-            getLevelObj()
+            viewModelScope.launch {
+                // update the statRepos value
+                levelRepos.addExp(level.value)
+                level.value = levelRepos.getLevel()
+            }
+
+//            _levelSystem.addExp(quest.exp)
+//            getLevelObj()
         } else{
             // updates failed stats
             stat.value.failedTotal += 1
@@ -107,7 +124,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
                 else -> {}
             }
         }
-
         viewModelScope.launch {
             // update the statRepos value
             statRepos.updateStats(stat.value)
@@ -123,14 +139,14 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         _selected.value = quest
     }
 
-    fun getLevelObj(){
-        _level.value = _levelSystem.getLevelObj()
-    }
+//    fun getLevelObj(){
+//        _level.value = _levelSystem.getLevelObj()
+//    }
 
 
-    fun getLevel(): Long{
-        return _level.value.level
-    }
+//    fun getLevel(): Long{
+//        return _level.value.level
+//    }
 
     fun getPassEasy(): Int {
         return stat.value.passedEasy//_passedEasy.value
@@ -179,9 +195,49 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     fun getCheck(): Boolean {
         return check.value
     }
+    fun newLevel(difficulty: DifficultyEnum) {
+        val levelDoub: Double = level.value.level.toDouble()
+        when(difficulty){
+            DifficultyEnum.easy -> {
+                level.value.currentExp += (3 * ((levelDoub).pow(0.7)) ).toLong()
+                checkLevelUp()
+            }
+
+            DifficultyEnum.medium -> {
+                level.value.currentExp += (5 * ((levelDoub).pow(0.7)) ).toLong()
+                checkLevelUp()
+            }
+
+            DifficultyEnum.hard -> {
+                level.value.currentExp += (9 * ((levelDoub).pow(0.7))).toLong()
+                checkLevelUp()
+            }
+
+            else -> { // challenges go here
+                level.value.currentExp = level.value.currentExp
+                checkLevelUp()
+            }
+        }
+    }
+    fun checkLevelUp() {
+        if(level.value.currentExp >= level.value.expTillLevelUp){
+            level.value.level += 1
+            level.value.currentExp = level.value.currentExp - level.value.expTillLevelUp
+            calculateExpForNextLevel()
+            checkLevelUp()
+        }
+    }
+
+    fun calculateExpForNextLevel() {
+        val levelDoub: Double = level.value.level.toDouble()
+        level.value.expTillLevelUp = (2 * ((levelDoub).pow(1.7)) - 2).toLong()
+    }
 
     fun setCheck() {
         check.value = !check.value
+    }
+    fun getlevel(): Long {
+        return level.value.level
     }
 
 }
