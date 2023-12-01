@@ -68,7 +68,11 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt ("androidx.room:room-compiler:$room_version")
+    // added to assist with making http requests
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
+    // added to assist with parsing json
+    implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("androidx.room:room-ktx:$room_version")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

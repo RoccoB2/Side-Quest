@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
+import edu.towson.cosc435.kraft.sidequest.IQuoteFetcher
+import edu.towson.cosc435.kraft.sidequest.QuoteFetcher
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.ILevelSystem
 import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
@@ -15,6 +17,7 @@ import edu.towson.cosc435.kraft.sidequest.data.model.Level
 import edu.towson.cosc435.kraft.sidequest.data.model.LevelDatabaseRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
+import edu.towson.cosc435.kraft.sidequest.data.model.Quote
 import edu.towson.cosc435.kraft.sidequest.data.model.StatDatabaseRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Stats
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +46,10 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     val waiting: State<Boolean>
 
     private val check: MutableState<Boolean>
+
+    private val quoteFetcher : IQuoteFetcher = QuoteFetcher()
+    val quotes : MutableState<Quote?> = mutableStateOf(null)
+    var buttonClick : MutableState<Boolean> = mutableStateOf(false)
     init {
         viewModelScope.launch{
             _quests.value = _repository.getQuests()
@@ -60,7 +67,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
             } else {
                 level.value = levelRepos.getLevel()
             }
-
         }
         check = mutableStateOf(true)
         _waiting = mutableStateOf(false)
@@ -239,5 +245,17 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     fun getlevel(): Long {
         return level.value.level
     }
+
+    fun getQuoteAPI(){
+        viewModelScope.launch {
+            quotes.value = quoteFetcher.fetchQuotes()
+        }
+    }
+
+    fun buttonClicked() {
+        buttonClick.value = true
+    }
+
+
 
 }
