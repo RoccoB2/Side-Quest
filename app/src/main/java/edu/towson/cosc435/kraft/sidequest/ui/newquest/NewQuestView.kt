@@ -1,10 +1,15 @@
 package edu.towson.cosc435.kraft.sidequest.ui.newquest
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +41,7 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,30 +107,122 @@ fun NewQuestView(
                 },
                 modifier = Modifier.padding(10.dp)
             )
-            OutlinedTextField(
-                value = vm.date.value,
-                onValueChange = vm::setDate,
-                placeholder = {
-                    Text( "Due date")
-                },
-                label = {
-                    Text("Due date")
-                },
-                singleLine = true,
-                modifier = Modifier.padding(10.dp)
+//            OutlinedTextField(
+//                value = vm.date.value,
+//                onValueChange = vm::setDate,
+//                placeholder = {
+//                    Text( "Due date")
+//                },
+//                label = {
+//                    Text("Due date")
+//                },
+//                singleLine = true,
+//                modifier = Modifier.padding(10.dp)
+//            )
+            val context = LocalContext.current
+            val calendar = Calendar.getInstance()
+
+            var selectedDateText by remember { mutableStateOf("") }
+
+            // Fetching current year, month and day
+            val year = calendar[Calendar.YEAR]
+            val month = calendar[Calendar.MONTH]
+            val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+            val datePicker = DatePickerDialog(
+                context,
+                { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+                    selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"
+                }, year, month, dayOfMonth
             )
-            OutlinedTextField(
-                value = vm.time.value,
-                onValueChange = vm::setTime,
-                placeholder = {
-                    Text( "Time due")
-                },
-                label = {
-                    Text("Time due")
-                },
-                singleLine = true,
-                modifier = Modifier.padding(10.dp)
+            datePicker.datePicker.minDate = calendar.timeInMillis
+            Column(
+                modifier = Modifier.fillMaxSize().padding(top = 15.dp, bottom = 15.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = {
+                        datePicker.show()
+                    },
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ) {
+                    Text(text = "Select a date")
+                }
+                Text(
+                    text = if (selectedDateText.isNotEmpty()) {
+                        vm.setDate(selectedDateText)
+                        "Date selected: $selectedDateText"
+                    } else{
+                        ""
+                    }
+                )
+            }
+//            OutlinedTextField(
+//                value = vm.time.value,
+//                onValueChange = vm::setTime,
+//                placeholder = {
+//                    Text( "Time due")
+//                },
+//                label = {
+//                    Text("Time due")
+//                },
+//                singleLine = true,
+//                modifier = Modifier.padding(10.dp)
+//            )
+            var selectedTimeText by remember { mutableStateOf("") }
+
+            // Fetching current hour, and minute
+            val hour = calendar[Calendar.HOUR_OF_DAY]
+            val minute = calendar[Calendar.MINUTE]
+            var hourSaved by remember {mutableStateOf(0)}
+            var minuteSaved by remember { mutableStateOf("") }
+            var ampmSaved by remember { mutableStateOf("") }
+            val timePicker = TimePickerDialog(
+                context,
+                { _, selectedHour: Int, selectedMinute: Int ->
+                    hourSaved = if(selectedHour > 12){
+                        selectedHour - 12
+                    } else {
+                        if(selectedHour == 0)
+                            12
+                        else
+                            selectedHour
+                    }
+                    minuteSaved = if(selectedMinute < 10){
+                        "0$selectedMinute"
+                    } else {
+                        "$selectedMinute"
+                    }
+                    ampmSaved = if(selectedHour >= 12){
+                        "PM"
+                    } else {
+                        "AM"
+                    }
+                    selectedTimeText = "$hourSaved:$minuteSaved $ampmSaved"
+                }, hour, minute, false
             )
+            Column(
+                modifier = Modifier.fillMaxSize().padding(top = 15.dp, bottom = 15.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = {
+                        timePicker.show()
+                    },
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ) {
+                    Text(text = "Select time")
+                }
+                Text(
+                    text = if (selectedTimeText.isNotEmpty()) {
+                        "Selected time is $selectedTimeText"
+                    } else {
+                        ""
+                    }
+                )
+            }
+
             Text(
                 "Quest Difficulty (Required)",
                 fontSize = 15.sp,
