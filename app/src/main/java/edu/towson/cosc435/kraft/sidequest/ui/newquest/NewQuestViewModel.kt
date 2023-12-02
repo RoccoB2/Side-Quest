@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
-import edu.towson.cosc435.kraft.sidequest.data.impl.QuestRepository
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 
 class NewQuestViewModel : ViewModel() {
