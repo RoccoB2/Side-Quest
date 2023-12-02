@@ -1,11 +1,16 @@
 package edu.towson.cosc435.kraft.sidequest.ui.nav
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
 import edu.towson.cosc435.kraft.sidequest.ui.newquest.NewQuestView
 import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListView
 import edu.towson.cosc435.kraft.sidequest.ui.questlist.QuestListViewModel
@@ -13,6 +18,7 @@ import edu.towson.cosc435.kraft.sidequest.ui.statsPage.StatView
 import edu.towson.cosc435.kraft.sidequest.ui.statsPage.StatViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun QuestsNavGraph(
@@ -27,6 +33,7 @@ fun QuestsNavGraph(
     ) {
         composable(Routes.QuestList.route) {
             val quests by vm.quests
+            RequestPushNotificationPermissions()
             QuestListView(
                 quests,
                 onToggle = vm::toggleStatus,
@@ -55,4 +62,21 @@ fun QuestsNavGraph(
 
     }
 
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun RequestPushNotificationPermissions() {
+    val permissionState = rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+    when(permissionState.status) {
+        PermissionStatus.Granted -> {
+
+        }
+        is PermissionStatus.Denied -> {
+            LaunchedEffect(key1 = true) {
+                permissionState.launchPermissionRequest()
+            }
+        }
+    }
 }

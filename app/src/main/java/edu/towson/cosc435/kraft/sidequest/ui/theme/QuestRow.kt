@@ -149,7 +149,7 @@ fun CardDescription(
                         modifier = Modifier.fillMaxWidth()
                             .verticalScroll(rememberScrollState())
                             .weight(1f),
-                        horizontalAlignment = Alignment.Start,
+//                        horizontalAlignment = Alignment.Start,
 
                         ) {
                         Text(
