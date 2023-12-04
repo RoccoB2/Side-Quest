@@ -9,6 +9,7 @@ import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import edu.towson.cosc435.kraft.sidequest.QuestCounterNotificationService
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import kotlinx.coroutines.launch
 
@@ -24,14 +25,18 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
     private val _waiting: MutableState<Boolean>
     val waiting: State<Boolean>
 
-
     private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
+
+    val service = QuestCounterNotificationService(app)
+    private var pendingCount: MutableState<Int> = mutableStateOf(0)
 
 
     init {
         viewModelScope.launch{
             _quests.value = _repository.getQuests()
             _quests.value = _quests.value.filter{ q -> q.status == StatusEnum.pending }
+            pendingCount.value = _quests.value.size
+            service.showNotification(pendingCount.value)
         }
         _selected = mutableStateOf(null)
         selectedQuest = _selected
@@ -46,6 +51,8 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
             _quests.value = _repository.getQuests()
             _quests.value = _quests.value.filter{ q -> q.status == StatusEnum.pending }
             _waiting.value = false
+            pendingCount.value = _quests.value.size
+            service.showNotification(pendingCount.value)
         }
        // _repository.updateQuestList(quests.value)
     }
@@ -58,6 +65,8 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
 //            _waiting.value = false
 //        }
         _quests.value = _quests.value.filter { q -> q.id != quest.id }
+        pendingCount.value = _quests.value.size
+        service.showNotification(pendingCount.value)
     }
 
     fun toggleStatus(quest: Quest,status: StatusEnum) {

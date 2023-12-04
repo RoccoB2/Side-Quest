@@ -107,18 +107,7 @@ fun NewQuestView(
                 },
                 modifier = Modifier.padding(10.dp)
             )
-//            OutlinedTextField(
-//                value = vm.date.value,
-//                onValueChange = vm::setDate,
-//                placeholder = {
-//                    Text( "Due date")
-//                },
-//                label = {
-//                    Text("Due date")
-//                },
-//                singleLine = true,
-//                modifier = Modifier.padding(10.dp)
-//            )
+
             val context = LocalContext.current
             val calendar = Calendar.getInstance()
 
@@ -157,18 +146,7 @@ fun NewQuestView(
                     }
                 )
             }
-//            OutlinedTextField(
-//                value = vm.time.value,
-//                onValueChange = vm::setTime,
-//                placeholder = {
-//                    Text( "Time due")
-//                },
-//                label = {
-//                    Text("Time due")
-//                },
-//                singleLine = true,
-//                modifier = Modifier.padding(10.dp)
-//            )
+
             var selectedTimeText by remember { mutableStateOf("") }
 
             // Fetching current hour, and minute
