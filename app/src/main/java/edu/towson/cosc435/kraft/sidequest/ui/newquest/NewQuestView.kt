@@ -216,7 +216,7 @@ fun NewQuestView(
                 }
                 Text(
                     text = if (selectedTimeText.isNotEmpty()) {
-                        "Selected time is $selectedTimeText"
+                        "Time selected: $selectedTimeText"
                     } else {
                         ""
                     }
