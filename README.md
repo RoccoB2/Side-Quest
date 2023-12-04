@@ -10,16 +10,19 @@ Side Quest is a stylized to-do list that is centered around completing quests fo
 
 * An "Add Quest" screen that allows users to customize each task they want to create
 * Each quest will have a Category, a Header, and a Difficulty
-* Optionally, users can enter a description as well as a due date and time
-* A "Home" screen to view all of the quests that are in progress
-* A "Stats Page" to view quest history as well as the user's current level
+* Users can also select a custom due date and time for each quest
+* Additionally, users can enter a description that they can view on the Home page by pressing the quest itself
 * Three levels of difficulty to award more experience for completion
+* A "Home" screen to view all of the quests that are in progress
+* A "Stats Page" to view the user's stats, quest history, and level
+* The Stats show how many of each quest you've passed and failed, as well as your current and longest streak
+* Are you struggling to find motivation? Simply hit the "Get Inspirational Quote" button to generate a quote
 * There is no limit to the kind of quest you can make
 
 
 ## Recommended Android Emulator
 
-We recommend an android emulator of API 30
+Side Quest requires an Android API of 33 with Google Play installed. 
 
 ## Dependencies
 
@@ -41,3 +44,24 @@ Added to assist with making http requests
 Added to assist with parsing json
 
 * implementation ("com.google.code.gson:gson:2.10.1")
+
+Other Dependencies
+
+* implementation("androidx.core:core-ktx:1.9.0")
+* implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+* implementation("androidx.activity:activity-compose:1.8.0")
+* implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+* implementation("androidx.compose.ui:ui")
+* implementation("androidx.compose.ui:ui-graphics")
+* implementation("androidx.compose.ui:ui-tooling-preview")
+* implementation("androidx.compose.material3:material3")
+* testImplementation("junit:junit:4.13.2")
+* androidTestImplementation("androidx.test.ext:junit:1.1.5")
+* androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+* androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+* androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+* debugImplementation("androidx.compose.ui:ui-tooling")
+* debugImplementation("androidx.compose.ui:ui-test-manifest")
+* implementation ("androidx.navigation:navigation-compose:2.6.0")
+* implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+* implementation ("androidx.activity:activity-compose:1.5.1")
