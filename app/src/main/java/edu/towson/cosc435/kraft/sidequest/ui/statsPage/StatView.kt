@@ -46,7 +46,7 @@ fun StatView(
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text(
-                        text ="Level: ${vm.getlevel()}",
+                        text ="Level: ${vm.getlevel()}" ,
                         fontSize = 25.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()

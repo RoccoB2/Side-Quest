@@ -236,7 +236,7 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
 
     fun calculateExpForNextLevel() {
         val levelDoub: Double = level.value.level.toDouble()
-        level.value.expTillLevelUp = (2 * ((levelDoub).pow(1.7)) - 2).toLong()
+        level.value.expTillLevelUp = (2 * ((levelDoub+1).pow(1.7)) - 2).toLong()
     }
 
     fun setCheck() {
@@ -244,6 +244,9 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     }
     fun getlevel(): Long {
         return level.value.level
+    }
+    fun getCurrentExp(): Long {
+        return level.value.expTillLevelUp
     }
 
     fun getQuoteAPI(){
