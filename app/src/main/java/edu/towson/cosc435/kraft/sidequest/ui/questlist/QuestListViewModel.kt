@@ -1,5 +1,6 @@
 package edu.towson.cosc435.kraft.sidequest.ui.questlist
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -52,23 +53,33 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         _waiting = mutableStateOf(false)
         waiting = _waiting
     }
-    fun setAlarms(){
+
+    private fun setAlarms(){
         val calendar = Calendar.getInstance()
         val context: Context = getApplication()
         currentDate.value = "${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.YEAR)}"
         _quests.value.forEach{quest ->
-            Log.d("look for me ", "if state was reached")
+            Log.d("something", "-1")
             if((quest.date==""|| quest.date == currentDate.value) && quest.time != ""){
-
+                Log.d("something", "1")
                     val intent = Intent(AlarmClock.ACTION_SET_ALARM).apply {
-                        putExtra(AlarmClock.EXTRA_MESSAGE, quest.header)
-                        putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time))
-                        putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time))
+//                        putExtra(AlarmClock.EXTRA_MESSAGE, quest.header)
+//                        putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time))
+//                        putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time))
+                        putExtra(AlarmClock.EXTRA_MESSAGE, "message")
+                        putExtra(AlarmClock.EXTRA_HOUR, "10")
+                        putExtra(AlarmClock.EXTRA_MINUTES, "10")
                     }
-
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//                    getApplication<Application>().startActivity(intent)
                     if (intent.resolveActivity(context.packageManager) != null) {
+                        Log.d("something", "the god zone")
                         startActivity(context,intent,null)
                     }
+//                if (intent.resolveActivity(getPackageManager()) != null) {
+//                    Log.d("something", "the god zone")
+//                    startActivity(context,intent,null)
+//                }
             }
         }
     }

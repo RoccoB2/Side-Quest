@@ -194,6 +194,7 @@ fun NewQuestView(
                 }
                 Text(
                     text = if (selectedTimeText.isNotEmpty()) {
+                        vm.setTime(selectedTimeText)
                         "Time selected: $selectedTimeText"
                     } else {
                         ""
