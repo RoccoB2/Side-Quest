@@ -44,7 +44,6 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         viewModelScope.launch{
             _quests.value = _repository.getQuests()
             _quests.value = _quests.value.filter{ q -> q.status == StatusEnum.pending }
-            setAlarms()
             pendingCount.value = _quests.value.size
             service.showNotification(pendingCount.value)
         }
@@ -54,26 +53,23 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         waiting = _waiting
     }
 
-    private fun setAlarms(){
+    private fun setAlarm(quest: Quest) {
         val calendar = Calendar.getInstance()
         val context: Context = getApplication()
         currentDate.value = "${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.YEAR)}"
-        _quests.value.forEach{quest ->
 
-            if((quest.date==""|| quest.date == currentDate.value) && quest.time != ""){
+        if((quest.date==""|| quest.date == currentDate.value) && quest.time != ""){
 
-                val intent = Intent(AlarmClock.ACTION_SET_ALARM).apply {
-//                  putExtra(AlarmClock.EXTRA_MESSAGE, quest.header)
-                    putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time))
-                    putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time))
-//                  putExtra(AlarmClock.EXTRA_MESSAGE, "message")
-                }
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//               getApplication<Application>().startActivity(intent)
-                if (intent.resolveActivity(context.packageManager) != null) {
-                    Log.d("something", "the god zone")
-                    startActivity(context, intent, null)
-                }
+            val intent = Intent(AlarmClock.ACTION_SET_ALARM).apply {
+                putExtra(AlarmClock.EXTRA_MESSAGE, quest.header)
+                putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time))
+                putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time))
+            }
+
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            if (intent.resolveActivity(context.packageManager) != null) {
+                Log.d("something", "the god zone")
+                startActivity(context, intent, null)
             }
         }
     }
@@ -127,6 +123,7 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
             _waiting.value = false
             pendingCount.value = _quests.value.size
             service.showNotification(pendingCount.value)
+            setAlarm(quest)
         }
        // _repository.updateQuestList(quests.value)
     }
