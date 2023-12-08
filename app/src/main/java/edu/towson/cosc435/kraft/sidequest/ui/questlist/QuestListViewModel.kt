@@ -59,59 +59,63 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         val context: Context = getApplication()
         currentDate.value = "${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.YEAR)}"
         _quests.value.forEach{quest ->
-            Log.d("something", "-1")
+
             if((quest.date==""|| quest.date == currentDate.value) && quest.time != ""){
-                Log.d("something", "1")
-                    val intent = Intent(AlarmClock.ACTION_SET_ALARM).apply {
-//                        putExtra(AlarmClock.EXTRA_MESSAGE, quest.header)
-//                        putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time))
-//                        putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time))
-                        putExtra(AlarmClock.EXTRA_MESSAGE, "message")
-                        putExtra(AlarmClock.EXTRA_HOUR, "10")
-                        putExtra(AlarmClock.EXTRA_MINUTES, "10")
-                    }
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//                    getApplication<Application>().startActivity(intent)
-                    if (intent.resolveActivity(context.packageManager) != null) {
-                        Log.d("something", "the god zone")
-                        startActivity(context,intent,null)
-                    }
-//                if (intent.resolveActivity(getPackageManager()) != null) {
-//                    Log.d("something", "the god zone")
-//                    startActivity(context,intent,null)
-//                }
+
+                val intent = Intent(AlarmClock.ACTION_SET_ALARM).apply {
+//                  putExtra(AlarmClock.EXTRA_MESSAGE, quest.header)
+                    putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time))
+                    putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time))
+//                  putExtra(AlarmClock.EXTRA_MESSAGE, "message")
+                }
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//               getApplication<Application>().startActivity(intent)
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    Log.d("something", "the god zone")
+                    startActivity(context, intent, null)
+                }
             }
         }
     }
-    fun timeConverterHour(time: String):String{
+    private fun timeConverterHour(time: String): Int {
         val hour : Int
         val isPm : Boolean = time.contains('P')
         val isDoubleDigitHour : Boolean = time.length == 8
+        Log.d("something", time.length.toString())
+
         if(isPm){
-            if (isDoubleDigitHour) {
-                hour = "${time[0]}${time[1]}".toInt() + 12
+
+            hour = if (isDoubleDigitHour) {
+                "${time[0]}${time[1]}".toInt() + 12
 
             }else{
-                hour = "${time[0]}".toInt() + 12
+                "${time[0]}".toInt() + 12
             }
+
         }else {
-            if (isDoubleDigitHour) {
-                hour = "${time[0]}${time[1]}".toInt()
+
+            hour = if (isDoubleDigitHour) {
+                "${time[0]}${time[1]}".toInt()
             }else{
-               return "0${time[0]}"
+                "${time[0]}".toInt()
             }
+
         }
+
         if(hour == 24){
-            return "00"
+            return 0
         }
-        return hour.toString()
+
+        return hour
     }
-    fun timeConverterMinutes(time: String):String{
+    private fun timeConverterMinutes(time: String): Int {
         val isDoubleDigitHour : Boolean = time.length == 8
-        if(isDoubleDigitHour){
-            return "${time[3]}${time[4]}"
+
+        return if(isDoubleDigitHour){
+            "${time[3]}${time[4]}".toInt()
         } else {
-            return "${time[4]}${time[5]}"
+//            Log.d("something", "${time[3]}${time[4]}-")
+            "${time[2]}${time[3]}".toInt()
         }
     }
     fun addQuest(quest: Quest) {
