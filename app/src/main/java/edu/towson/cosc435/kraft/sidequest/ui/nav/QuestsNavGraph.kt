@@ -2,7 +2,6 @@ package edu.towson.cosc435.kraft.sidequest.ui.nav
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +33,7 @@ fun QuestsNavGraph(
         composable(Routes.QuestList.route) {
             val quests by vm.quests
             RequestPushNotificationPermissions()
+            RequestAlarmPermissions()
             QuestListView(
                 quests,
                 onToggle = vm::toggleStatus,
@@ -79,4 +79,22 @@ fun RequestPushNotificationPermissions() {
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun RequestAlarmPermissions() {
+    val permissionState = rememberPermissionState(android.Manifest.permission.SET_ALARM)
+    when(permissionState.status) {
+        PermissionStatus.Granted -> {
+
+        }
+        is PermissionStatus.Denied -> {
+            LaunchedEffect(key1 = true) {
+                permissionState.launchPermissionRequest()
+            }
+        }
+    }
+
 }

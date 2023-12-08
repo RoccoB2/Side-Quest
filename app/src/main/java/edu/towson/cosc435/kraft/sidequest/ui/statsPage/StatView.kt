@@ -29,6 +29,7 @@ import edu.towson.cosc435.kraft.sidequest.ui.newquest.NewQuestViewModel
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
 import edu.towson.cosc435.kraft.sidequest.ui.theme.StatRow
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import java.util.Calendar
 
 
 @Composable
@@ -43,6 +44,7 @@ fun StatView(
             modifier = Modifier.padding(bottom = 75.dp)
         ) {
             val config = LocalConfiguration.current
+
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text(

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 <!--    added for notifications-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <!--  added to allow app to connect to internet  -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -23,7 +24,8 @@
             android:theme="@style/Theme.SideQuest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+<!--                <action android:name="android.intent.action.SET_ALARM" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

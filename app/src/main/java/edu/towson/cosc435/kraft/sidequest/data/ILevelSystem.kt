@@ -12,6 +12,4 @@ interface ILevelSystem {
     //fun checkLevelUp()
     //fun calculateExpForNextLevel()
     suspend fun addLevel(level : Level)
-
-
 }
