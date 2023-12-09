@@ -42,6 +42,9 @@ fun QuestsNavGraph(
                     vm2.addQuest(quest)
                     navController.navigate(Routes.Stats.route)
                 },
+                onAddQuest = {
+                    navController.navigate(Routes.AddQuest.route)
+                },
                 selectQuest = vm::selectQuest,
                 isQuestSelected = vm::isQuestSelected,
                 getSelectedQuest = vm::getSelectedQuest

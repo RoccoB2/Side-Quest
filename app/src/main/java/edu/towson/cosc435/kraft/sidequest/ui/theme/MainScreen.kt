@@ -1,6 +1,8 @@
 package edu.towson.cosc435.kraft.sidequest.ui.theme
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
@@ -19,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import edu.towson.cosc435.kraft.sidequest.ui.nav.QuestsNavGraph
 import edu.towson.cosc435.kraft.sidequest.ui.nav.Routes
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

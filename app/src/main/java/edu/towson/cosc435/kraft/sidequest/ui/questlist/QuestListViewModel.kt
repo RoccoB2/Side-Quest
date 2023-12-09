@@ -66,6 +66,7 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
                 putExtra(AlarmClock.EXTRA_MESSAGE, quest.header) // message set to the quests header
                 putExtra(AlarmClock.EXTRA_HOUR, timeConverterHour(quest.time)) // hour set to the hour due
                 putExtra(AlarmClock.EXTRA_MINUTES, timeConverterMinutes(quest.time)) // minute set to the minute due
+                putExtra(AlarmClock.EXTRA_SKIP_UI, true) // does not auto open the clock app
             }
 
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK // adds new task flag to intent

@@ -81,7 +81,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _waiting.value = true
-//                delay(500)
                 _quests.value = _repository.getQuests()
                 _quests.value = _quests.value.filter { q -> q.status != StatusEnum.pending }
                 _waiting.value = false
@@ -113,8 +112,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
                 level.value = levelRepos.getLevel()
             }
 
-//            _levelSystem.addExp(quest.exp)
-//            getLevelObj()
         } else{
             // updates failed stats
             stat.value.failedTotal += 1
@@ -144,15 +141,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     fun selectQuest(quest: Quest) {
         _selected.value = quest
     }
-
-//    fun getLevelObj(){
-//        _level.value = _levelSystem.getLevelObj()
-//    }
-
-
-//    fun getLevel(): Long{
-//        return _level.value.level
-//    }
 
     fun getPassEasy(): Int {
         return stat.value.passedEasy//_passedEasy.value
@@ -201,21 +189,21 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     fun getCheck(): Boolean {
         return check.value
     }
-    fun newLevel(difficulty: DifficultyEnum) {
-        val levelDoub: Double = level.value.level.toDouble()
+    private fun newLevel(difficulty: DifficultyEnum) {
+        val levelDouble: Double = level.value.level.toDouble()
         when(difficulty){
             DifficultyEnum.easy -> {
-                level.value.currentExp += (3 * ((levelDoub).pow(0.7)) ).toLong()
+                level.value.currentExp += (3 * ((levelDouble).pow(0.7)) ).toLong()
                 checkLevelUp()
             }
 
             DifficultyEnum.medium -> {
-                level.value.currentExp += (5 * ((levelDoub).pow(0.7)) ).toLong()
+                level.value.currentExp += (5 * ((levelDouble).pow(0.7)) ).toLong()
                 checkLevelUp()
             }
 
             DifficultyEnum.hard -> {
-                level.value.currentExp += (9 * ((levelDoub).pow(0.7))).toLong()
+                level.value.currentExp += (9 * ((levelDouble).pow(0.7))).toLong()
                 checkLevelUp()
             }
 
@@ -225,7 +213,7 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
             }
         }
     }
-    fun checkLevelUp() {
+    private fun checkLevelUp() {
         if(level.value.currentExp >= level.value.expTillLevelUp){
             level.value.level += 1
             level.value.currentExp = level.value.currentExp - level.value.expTillLevelUp
@@ -234,9 +222,9 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         }
     }
 
-    fun calculateExpForNextLevel() {
-        val levelDoub: Double = level.value.level.toDouble()
-        level.value.expTillLevelUp = (2 * ((levelDoub+1).pow(1.7)) - 2).toLong()
+    private fun calculateExpForNextLevel() {
+        val levelDouble: Double = level.value.level.toDouble()
+        level.value.expTillLevelUp = (2 * ((levelDouble + 1).pow(1.7)) - 2).toLong()
     }
 
     fun setCheck() {
@@ -246,6 +234,10 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         return level.value.level
     }
     fun getCurrentExp(): Long {
+        return level.value.currentExp
+    }
+
+    fun getExpTillLevelUp(): Long{
         return level.value.expTillLevelUp
     }
 
