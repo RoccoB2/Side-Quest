@@ -1,5 +1,4 @@
 package edu.towson.cosc435.kraft.sidequest.ui.questlist
-
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -102,7 +101,11 @@ fun QuestListView(
                             }
                         )
                         onFilterQuest(searchText)
-                        IconButton(onClick = { searching = false }) {
+                        IconButton(onClick = {
+                            searching = false
+                            searchText = ""
+                            onFilterQuest(searchText)
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = null
