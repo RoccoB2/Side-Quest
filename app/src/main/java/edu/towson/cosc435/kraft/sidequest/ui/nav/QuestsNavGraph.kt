@@ -40,14 +40,17 @@ fun QuestsNavGraph(
                 onDeleteQuest = vm::deleteQuest,
                 onPassQuest = { quest ->
                     vm2.addQuest(quest)
-                    navController.navigate(Routes.Stats.route)
                 },
                 onAddQuest = {
                     navController.navigate(Routes.AddQuest.route)
                 },
                 selectQuest = vm::selectQuest,
                 isQuestSelected = vm::isQuestSelected,
-                getSelectedQuest = vm::getSelectedQuest
+                getSelectedQuest = vm::getSelectedQuest,
+                calculateExp = vm::calculateExp,
+                getLevel = vm2::getlevel,
+                getCurrentExp = vm2::getCurrentExp,
+                getExpTillLevelUp = vm2::getExpTillLevelUp
             )
         }
 

@@ -30,20 +30,18 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     val quest: State<List<Quest>> = _quests
 
     private val statRepos: IStatRepository = StatDatabaseRepository(getApplication())
-    var stat: MutableState<Stats> = mutableStateOf(Stats(0, 0,0,0,0,0,0,0,0,0,0,0))
+    private var stat: MutableState<Stats> = mutableStateOf(Stats(0, 0,0,0,0,0,0,0,0,0,0,0))
 
     private val _selected: MutableState<Quest?>
-    val selectedQuest: State<Quest?>
+    private val selectedQuest: State<Quest?>
     private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
 
-//    private val _level: MutableState<Level>
-//    private val _levelSystem: ILevelSystem = LevelSystem()
     private val levelRepos: ILevelSystem = LevelDatabaseRepository(getApplication())
     var level: MutableState<Level> = mutableStateOf(Level(0,1, 0, 5))
 
 
     private val _waiting: MutableState<Boolean>
-    val waiting: State<Boolean>
+    private val waiting: State<Boolean>
 
     private val check: MutableState<Boolean>
 
@@ -72,8 +70,6 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         _waiting = mutableStateOf(false)
         waiting = _waiting
         _selected = mutableStateOf(null)
-        //_level = mutableStateOf(Level(1, 0, 5))
-        //getLevelObj()
         selectedQuest = _selected
     }
 

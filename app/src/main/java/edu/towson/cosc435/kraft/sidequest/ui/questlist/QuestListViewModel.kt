@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.QuestCounterNotificationService
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.IQuestRepository
@@ -17,6 +18,7 @@ import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.data.model.QuestDatabaseRepository
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import kotlin.math.pow
 
 class QuestListViewModel(app : Application): AndroidViewModel(app) {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf()) // holds the current list of pending quests
@@ -164,6 +166,27 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
     // function to get the quest that has been selected
     fun getSelectedQuest(): Quest?{
         return _selected.value // returns selected quest
+    }
+
+    fun calculateExp(difficulty: DifficultyEnum, level: Long): Long {
+        val levelDouble: Double = level.toDouble()
+        return when(difficulty){
+            DifficultyEnum.easy -> {
+                (3 * ((levelDouble).pow(0.7)) ).toLong()
+            }
+
+            DifficultyEnum.medium -> {
+                (5 * ((levelDouble).pow(0.7)) ).toLong()
+            }
+
+            DifficultyEnum.hard -> {
+                (9 * ((levelDouble).pow(0.7))).toLong()
+            }
+
+            else -> {
+                0
+            }
+        }
     }
 
 }

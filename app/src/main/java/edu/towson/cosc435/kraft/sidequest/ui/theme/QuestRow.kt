@@ -31,10 +31,12 @@ fun QuestRow(
     onDeleteQuest: (Quest) -> Unit,
     selectQuest: (Quest?) -> Unit,
     isQuestSelected: () -> Boolean,
-    getSelectedQuest: () -> Quest?
+    getSelectedQuest: () -> Quest?,
+    calculateExp: (DifficultyEnum, Long) -> Long,
+    getLevel: () -> Long
 ) {
     if(isQuestSelected())
-        CardDescription(selectQuest, isQuestSelected, getSelectedQuest())
+        CardDescription(selectQuest, isQuestSelected, getSelectedQuest(), calculateExp, getLevel)
     Card(
         modifier = Modifier
             .padding(20.dp)
@@ -63,6 +65,7 @@ fun QuestRow(
                     Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
                 if (quest.time.isNotEmpty())
                     Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                Text(text = "Exp: +${calculateExp(quest.exp, getLevel())}", modifier = Modifier.padding(top = 5.dp, start = 5.dp))
 
             }
             Column() {
@@ -123,7 +126,9 @@ fun getDifficulty(difficulty: DifficultyEnum): String {
 fun CardDescription(
     selectQuest: (Quest?) -> Unit,
     isQuestSelected: () -> Boolean,
-    quest: Quest?
+    quest: Quest?,
+    calculateExp: (DifficultyEnum, Long) -> Long,
+    getLevel: () -> Long
 ) {
     Dialog(onDismissRequest = {
         selectQuest(null)
@@ -146,7 +151,8 @@ fun CardDescription(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     FlowColumn(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .verticalScroll(rememberScrollState())
                             .weight(1f),
 //                        horizontalAlignment = Alignment.Start,
@@ -158,22 +164,31 @@ fun CardDescription(
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
+
                         Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)
-                        if (quest.date.isNotEmpty())
+
+                        if (quest.date.isNotEmpty()) {
                             Text(
                                 text = "Date: ${quest.date}",
                                 modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                             )
-                        if (quest.time.isNotEmpty())
+                        }
+
+                        if (quest.time.isNotEmpty()) {
                             Text(
                                 text = "Time: ${quest.time}",
                                 modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                             )
-                        if (quest.description.isNotEmpty())
+                        }
+
+                        Text(text = "Exp: +${calculateExp(quest.exp, getLevel())}", modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+
+                        if (quest.description.isNotEmpty()) {
                             Text(
                                 text = "Description: ${quest.description}",
                                 modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                             )
+                        }
 
                 }
             }

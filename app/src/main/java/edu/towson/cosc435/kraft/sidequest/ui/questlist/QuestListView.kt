@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
@@ -40,7 +41,11 @@ fun QuestListView(
     onDeleteQuest: (Quest) -> Unit,
     selectQuest: (Quest?) -> Unit,
     isQuestSelected: () -> Boolean,
-    getSelectedQuest: () -> Quest?
+    getSelectedQuest: () -> Quest?,
+    getLevel: () -> Long,
+    getCurrentExp: () -> Long,
+    getExpTillLevelUp: () -> Long,
+    calculateExp: (DifficultyEnum, Long) -> Long
 ) {
     Box(
         contentAlignment = Alignment.Center
@@ -58,11 +63,26 @@ fun QuestListView(
                 0f
             ))
         ) {
+
+            Text(
+                text ="Level: ${getLevel()}",
+                fontSize = 25.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(top = 15.dp)
+            )
+
+            Text(
+                text = "EXP: ${getCurrentExp()}/${getExpTillLevelUp()}",
+                fontSize = 15.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
             val config = LocalConfiguration.current
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT && quests.isNotEmpty()) {
                 LazyColumn() {
                     items(quests) {quest ->
-                        QuestRow(quest, onToggle, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest)
+                        QuestRow(quest, onToggle, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest, calculateExp, getLevel)
                     }
                 }
             } else {
