@@ -12,6 +12,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardDefaults.cardColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -44,7 +47,8 @@ fun QuestRow(
                 selectQuest(quest)
             })
             .fillMaxWidth()
-            .height(140.dp)
+            .height(140.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.scrim)
     ){
         Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
         Row(
@@ -65,7 +69,7 @@ fun QuestRow(
                     Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
                 if (quest.time.isNotEmpty())
                     Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
-                Text(text = "Exp: +${calculateExp(quest.exp, getLevel())}", modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                Text(text = "+${calculateExp(quest.exp, getLevel())} Exp", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))
 
             }
             Column() {
@@ -142,7 +146,8 @@ fun CardDescription(
                 modifier = Modifier
                     .padding(20.dp)
                     .fillMaxWidth()
-                    .height(170.dp)
+                    .height(170.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.scrim)
             ) {
 
                 Row(
@@ -181,7 +186,11 @@ fun CardDescription(
                             )
                         }
 
-                        Text(text = "Exp: +${calculateExp(quest.exp, getLevel())}", modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                        Text(
+                            text = "+${calculateExp(quest.exp, getLevel())} Exp",
+                            modifier = Modifier.padding(top = 5.dp, start = 5.dp),
+                            color = Color(0xFFFF7700)
+                        )
 
                         if (quest.description.isNotEmpty()) {
                             Text(

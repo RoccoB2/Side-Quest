@@ -148,7 +148,8 @@ fun QuestListView(
                                 onAddQuest()
                             })
                             .fillMaxWidth()
-                            .height(140.dp)
+                            .height(140.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.scrim)
                     ){
                         Text(text = "Add a quest", fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
                         Column(

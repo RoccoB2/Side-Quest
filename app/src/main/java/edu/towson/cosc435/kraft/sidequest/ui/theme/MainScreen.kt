@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -50,10 +51,10 @@ private fun BottomNavBar(
                 }
             },
             icon = {
-                Icon(Icons.Default.Person, "")
+                Icon(Icons.Default.Person, "", tint = MaterialTheme.colorScheme.secondary)
             },
             label = {
-                Text("Stats Page")
+                Text("Stats Page", color = MaterialTheme.colorScheme.secondary)
             }
         )
         NavigationBarItem(
@@ -65,10 +66,10 @@ private fun BottomNavBar(
                 }
             },
             icon = {
-                Icon(Icons.Default.Home, "")
+                Icon(Icons.Default.Home, "", tint = MaterialTheme.colorScheme.secondary)
             },
             label = {
-                Text("Home")
+                Text("Home", color = MaterialTheme.colorScheme.secondary)
             }
         )
         NavigationBarItem(
@@ -80,10 +81,10 @@ private fun BottomNavBar(
                 }
             },
             icon = {
-                Icon(Icons.Default.Add, "")
+                Icon(Icons.Default.Add, "", tint = MaterialTheme.colorScheme.secondary)
             },
             label = {
-                Text("Add Quest")
+                Text("Add Quest", color = MaterialTheme.colorScheme.secondary)
             }
         )
     }

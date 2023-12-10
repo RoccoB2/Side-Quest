@@ -15,19 +15,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val darkColorScheme = darkColorScheme(
+    background = BackgroundDarkTheme,
+    primary = WeirdGreen50,
+    secondary = NavBarDarkElements,
+    tertiary = Pink80,
+    surface = WeirdGreen50,
+    scrim = CardColorTheme
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val lightColorScheme = lightColorScheme(
+    background = BackgroundLightTheme,
+    primary = WeirdGreen50,
+    secondary = NavBarLightElements,
+    tertiary = Pink40,
+    scrim = QuestCardColor,
+    surface = WeirdGreen50
+
+
 
     /* Other default colors to override
-    background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
     onPrimary = Color.White,
     onSecondary = Color.White,
@@ -47,11 +54,21 @@ fun SideQuestTheme(
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) darkColorScheme(background = BackgroundDarkTheme,
+                primary = WeirdGreen50,
+                secondary = NavBarDarkElements,
+                tertiary = Pink80,
+                surface = WeirdGreen50,
+                scrim = CardColorTheme) else lightColorScheme(background = BackgroundLightTheme,
+                primary = WeirdGreen50,
+                secondary = NavBarLightElements,
+                tertiary = Pink40,
+                scrim = QuestCardColor,
+                surface = WeirdGreen50)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

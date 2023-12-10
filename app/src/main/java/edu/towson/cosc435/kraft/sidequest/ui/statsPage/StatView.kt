@@ -91,7 +91,7 @@ fun StatView(
                                 modifier = Modifier.padding(10.dp)
                             )
                             Text(
-                                text = "Total Passedd: ${vm.getPassTotal()}",
+                                text = "Total Passed: ${vm.getPassTotal()}",
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )

@@ -10,6 +10,8 @@ import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -27,7 +29,8 @@ fun StatRow(
             .padding(20.dp)
             .clickable { }
             .fillMaxWidth()
-            .height(140.dp)
+            .height(140.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.scrim)
     ){
 
         Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
@@ -63,14 +66,14 @@ fun StatRow(
                     if(quest.status==StatusEnum.pass)
                         Text(
                             "PASS",
-                            color = Color(0xFF54DE79), // green
+                            color = Color(0xFF15BD30), // green
                             fontSize = 15.sp,
                             modifier = Modifier.padding(15.dp)
                         )
                     else
                         Text(
                             "FAIL",
-                            color = Color(0xFFDE5454), // red
+                            color = Color(0xFFDF1D1D), // red
                             fontSize = 15.sp,
                             modifier = Modifier.padding(15.dp)
                         )
