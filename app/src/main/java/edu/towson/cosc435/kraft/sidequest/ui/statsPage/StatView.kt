@@ -49,14 +49,14 @@ fun StatView(
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
                     Text(
-                        text ="Level: ${vm.getlevel()}",
+                        text ="Level: ${vm.getlevel()}",//displays users level
                         fontSize = 25.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(top = 15.dp)
                     )
 
                     Text(
-                        text = "EXP: ${vm.getCurrentExp()}/${vm.getExpTillLevelUp()}",
+                        text = "EXP: ${vm.getCurrentExp()}/${vm.getExpTillLevelUp()}",//displays users current exp and exp till level up
                         fontSize = 15.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
@@ -74,24 +74,24 @@ fun StatView(
                             )
 
                             Text(
-                                text = "Easy: ${vm.getPassEasy()}",
+                                text = "Easy: ${vm.getPassEasy()}",//displays number of passed easu quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
 
                             Text(
-                                text = "Medium: ${vm.getPassMedium()}",
+                                text = "Medium: ${vm.getPassMedium()}",//displays number of passed medium quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
 
                             Text(
-                                text = "Hard: ${vm.getPassHard()}",
+                                text = "Hard: ${vm.getPassHard()}", //displayed the number of passed quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
                             Text(
-                                text = "Total Passed: ${vm.getPassTotal()}",
+                                text = "Total Passed: ${vm.getPassTotal()}",//displays total number of passed quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
@@ -105,31 +105,31 @@ fun StatView(
                             )
 
                             Text(
-                                text = "Easy: ${vm.getFailEasy()}",
+                                text = "Easy: ${vm.getFailEasy()}",//displays the number of failed easy quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
 
                             Text(
-                                text = "Medium: ${vm.getFailMedium()}",
+                                text = "Medium: ${vm.getFailMedium()}",//displays the number of failed medium quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
 
                             Text(
-                                text = "Hard: ${vm.getFailHard()}",
+                                text = "Hard: ${vm.getFailHard()}",//displays the number of failed hard quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
                             Text(
-                                text = "Total Failed: ${vm.getFailTotal()}",
+                                text = "Total Failed: ${vm.getFailTotal()}",//displays the total number of failed quests
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
                     Text(
-                        text = "Total Quests: ${vm.getTotalQuests()}",
+                        text = "Total Quests: ${vm.getTotalQuests()}",//displays the total number of quests
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
@@ -140,14 +140,14 @@ fun StatView(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Longest Streak: ${vm.getLongestStreak()}",
+                            text = "Longest Streak: ${vm.getLongestStreak()}",//displays the longest streak of passed quests
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(10.dp)
                         )
 
                         Text(
-                            text = "Current Streak: ${vm.getCurrentStreak()}",
+                            text = "Current Streak: ${vm.getCurrentStreak()}",//displays the current streak of passed quests
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(10.dp)
@@ -158,24 +158,24 @@ fun StatView(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         , horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        Button(onClick = {
-                            vm.buttonClicked()
-                            vm.getQuoteAPI()
+                        Button(onClick = {//button to display inspirational quote
+                            vm.buttonClicked() //toggles if button was clicked
+                            vm.getQuoteAPI() //retrives quote from API
                         },
-                            enabled = !vm.buttonClick.value
+                            enabled = !vm.buttonClick.value //disables button if clicked
                         ) {
                             Text("Get Inspirational Quote")
                         }
                         if(vm.buttonClick.value){
                             if(vm.quotes.value == null){
-                                CircularProgressIndicator()
+                                CircularProgressIndicator()//loading progress indicator if it takes time to display quote after button press
                             } else{
-                                Text("${vm.quotes.value!!.q} - ${vm.quotes.value!!.a}")
+                                Text("${vm.quotes.value!!.q} - ${vm.quotes.value!!.a}")//displays the quote in format of quote - author
                             }
                         }
                     }
                     quests.forEach{quest ->
-                        StatRow(quest)
+                        StatRow(quest) //displays list of quests from statviewmodel, only displays quests that are complete
                     }
                 }
             }

@@ -92,15 +92,15 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
 
             when(quest.exp){
 
-                DifficultyEnum.easy -> stat.value.passedEasy += 1
+                DifficultyEnum.easy -> stat.value.passedEasy += 1//increaes passed easy by 1
 
-                DifficultyEnum.medium -> stat.value.passedMedium += 1
+                DifficultyEnum.medium -> stat.value.passedMedium += 1//increases passed medium by 1
 
-                DifficultyEnum.hard -> stat.value.passedHard += 1
+                DifficultyEnum.hard -> stat.value.passedHard += 1//increased passed hard by 1
 
                 else -> {}
             }
-            newLevel(quest.exp)
+            newLevel(quest.exp)//calls newLevel
             // updates level with new exp
             viewModelScope.launch {
                 // update the statRepos value
@@ -110,15 +110,15 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
 
         } else{
             // updates failed stats
-            stat.value.failedTotal += 1
-            stat.value.currentStreak = 0
+            stat.value.failedTotal += 1//increaes failed total by 1
+            stat.value.currentStreak = 0 //resets current streak to 0 when quest is failed
 
             when(quest.exp){
-                DifficultyEnum.easy -> stat.value.failedEasy += 1
+                DifficultyEnum.easy -> stat.value.failedEasy += 1//increases failed easy by 1
 
-                DifficultyEnum.medium -> stat.value.failedMedium += 1
+                DifficultyEnum.medium -> stat.value.failedMedium += 1//increases failed medium by 1
 
-                DifficultyEnum.hard -> stat.value.failedHard += 1
+                DifficultyEnum.hard -> stat.value.failedHard += 1//increased failed hard by 1
 
                 else -> {}
             }
@@ -130,121 +130,112 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         }
     }
 
-    fun filter(search: String) {
-        //_quests.value = _repository.getQuests().filter { a -> a.description.contains(search, true)}
-    }
 
-    fun selectQuest(quest: Quest) {
-        _selected.value = quest
-    }
+
 
     fun getPassEasy(): Int {
-        return stat.value.passedEasy//_passedEasy.value
+        return stat.value.passedEasy//returns number of easy quests passed
     }
 
     fun getPassMedium(): Int {
-        return stat.value.passedMedium//_passedMedium.value
+        return stat.value.passedMedium//returns number of medium quests passed
     }
 
     fun getPassHard(): Int {
-        return stat.value.passedHard//_passedHard.value
+        return stat.value.passedHard//returns number of hard quests passed
     }
 
     fun getPassTotal(): Int {
-        return stat.value.passedTotal//_passedTotal.value
+        return stat.value.passedTotal//returns total number of passed quests
     }
 
     fun getFailEasy(): Int {
-        return stat.value.failedEasy//_failedEasy.value
+        return stat.value.failedEasy//returns number of easy quests failed
     }
 
     fun getFailMedium(): Int {
-        return stat.value.failedMedium//_failedMedium.value
+        return stat.value.failedMedium//returns number of medium quests failed
     }
 
     fun getFailHard(): Int {
-        return stat.value.failedHard//_failedHard.value
+        return stat.value.failedHard//returns number of hard quests failed
     }
 
     fun getFailTotal(): Int {
-        return stat.value.failedTotal//_failedTotal.value
+        return stat.value.failedTotal//returns total number of failed quests
     }
 
     fun getTotalQuests(): Int {
-        return stat.value.totalQuests//_totalQuests.value
+        return stat.value.totalQuests//returns total number of completed quests
     }
 
     fun getLongestStreak(): Int {
-        return stat.value.longestStreak//_longestStreak.value
+        return stat.value.longestStreak//returns longest streak
     }
 
     fun getCurrentStreak(): Int {
-        return stat.value.currentStreak//_currentStreak.value
+        return stat.value.currentStreak//returns current streak
     }
 
-    fun getCheck(): Boolean {
-        return check.value
-    }
+
     private fun newLevel(difficulty: DifficultyEnum) {
         val levelDouble: Double = level.value.level.toDouble()
         when(difficulty){
             DifficultyEnum.easy -> {
-                level.value.currentExp += (3 * ((levelDouble).pow(0.7)) ).toLong()
-                checkLevelUp()
+                level.value.currentExp += (3 * ((levelDouble).pow(0.7)) ).toLong() //function for easy exp added to current when easy quest is completed
+                checkLevelUp()//checks if level up should occur
             }
 
             DifficultyEnum.medium -> {
-                level.value.currentExp += (5 * ((levelDouble).pow(0.7)) ).toLong()
-                checkLevelUp()
+                level.value.currentExp += (5 * ((levelDouble).pow(0.7)) ).toLong()//function for medium exp added to current when medium quest is completed
+                checkLevelUp()//checks if level up should occur
             }
 
             DifficultyEnum.hard -> {
-                level.value.currentExp += (9 * ((levelDouble).pow(0.7))).toLong()
-                checkLevelUp()
+                level.value.currentExp += (9 * ((levelDouble).pow(0.7))).toLong()//function for hard exp added to current when hard quest is completed
+                checkLevelUp()//checks if level up should occur
             }
 
             else -> { // challenges go here
                 level.value.currentExp = level.value.currentExp
-                checkLevelUp()
+                checkLevelUp()//checks if level up should occur
             }
         }
     }
-    private fun checkLevelUp() {
-        if(level.value.currentExp >= level.value.expTillLevelUp){
-            level.value.level += 1
-            level.value.currentExp = level.value.currentExp - level.value.expTillLevelUp
-            calculateExpForNextLevel()
-            checkLevelUp()
+    private fun checkLevelUp() {//checks if level up should occur
+        if(level.value.currentExp >= level.value.expTillLevelUp){//compares current exp and exp till level up
+            level.value.level += 1//increases level by 1
+            level.value.currentExp = level.value.currentExp - level.value.expTillLevelUp//calculates new current exp
+            calculateExpForNextLevel()//gets new exp till level up
+            checkLevelUp()//double checks for another level up
         }
     }
 
-    private fun calculateExpForNextLevel() {
+    private fun calculateExpForNextLevel() {//calculates exp for next level up
         val levelDouble: Double = level.value.level.toDouble()
-        level.value.expTillLevelUp = (2 * ((levelDouble + 1).pow(1.7)) - 2).toLong()
+        level.value.expTillLevelUp = (2 * ((levelDouble + 1).pow(1.7)) - 2).toLong()//function for exp of next level(exp till level up)
     }
 
-    fun setCheck() {
-        check.value = !check.value
-    }
+
     fun getlevel(): Long {
-        return level.value.level
+        return level.value.level //returns level
     }
     fun getCurrentExp(): Long {
-        return level.value.currentExp
+        return level.value.currentExp //returns currentexp
     }
 
     fun getExpTillLevelUp(): Long{
-        return level.value.expTillLevelUp
+        return level.value.expTillLevelUp//returns exptilllevelup
     }
 
     fun getQuoteAPI(){
         viewModelScope.launch {
-            quotes.value = quoteFetcher.fetchQuotes()
+            quotes.value = quoteFetcher.fetchQuotes()//calls quotefetcher to get quote
         }
     }
 
     fun buttonClicked() {
-        buttonClick.value = true
+        buttonClick.value = true//sets buttonclick to true so the get inspirational quote button locks
     }
 
 

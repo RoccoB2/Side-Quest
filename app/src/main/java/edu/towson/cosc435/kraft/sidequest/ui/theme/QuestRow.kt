@@ -39,7 +39,7 @@ fun QuestRow(
     getLevel: () -> Long
 ) {
     if(isQuestSelected())
-        CardDescription(selectQuest, isQuestSelected, getSelectedQuest(), calculateExp, getLevel)
+        CardDescription(selectQuest, isQuestSelected, getSelectedQuest(), calculateExp, getLevel)//calls function for dialog if a quest in the list is clicked
     Card(
         modifier = Modifier
             .padding(20.dp)
@@ -62,22 +62,22 @@ fun QuestRow(
                     modifier = Modifier.padding(top = 0.dp, start = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)
+                    Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)//displays difficulty of the quest
 
                 }
                 if (quest.date.isNotEmpty())
-                    Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                    Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))//displays date of the quest
                 if (quest.time.isNotEmpty())
-                    Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
-                Text(text = "+${calculateExp(quest.exp, getLevel())} Exp", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))
+                    Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))//displays time of the quest
+                Text(text = "+${calculateExp(quest.exp, getLevel())} Exp", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))//displays amount of exp given on quest completion
 
             }
             Column() {
                 Row(
                     modifier = Modifier.padding(top = 30.dp)
                 ) {
-                    Button(
-                        onClick = {
+                    Button( //button to pass quest displayed in green
+                        onClick = {//onclick creates a new quest set to the old one, passes the newquest onto the stats screen and deletes the old quest of the quest list
                             val newQuest: Quest = Quest(quest.id, quest.category,quest.description,quest.date, quest.time,quest.exp,StatusEnum.pass, quest.header)
                             onToggle(quest, newQuest.status)
                             onPassQuest(newQuest)
@@ -92,8 +92,8 @@ fun QuestRow(
                     {
                         Text("Pass")
                     }
-                    Button(
-                        onClick = {
+                    Button(//button to quest displayed in red
+                        onClick = {//onclick creates a new quest set to the old one, passes the newquest onto the stats screen and deletes the old quest of the quest list
                             val newQuest: Quest = Quest(quest.id, quest.category,quest.description,quest.date, quest.time,quest.exp,StatusEnum.fail, quest.header)
                             onToggle(quest, newQuest.status)
                             onPassQuest(newQuest)
@@ -115,7 +115,7 @@ fun QuestRow(
     }
 }
 
-fun getDifficulty(difficulty: DifficultyEnum): String {
+fun getDifficulty(difficulty: DifficultyEnum): String {//returns a string depending on the difficulty passed into this function
     return when(difficulty){
         DifficultyEnum.easy ->  "Easy"
         DifficultyEnum.medium -> "Medium"
@@ -127,21 +127,18 @@ fun getDifficulty(difficulty: DifficultyEnum): String {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CardDescription(
+fun CardDescription(//dialog function that displays when a card is clicked, displays entirety of the card including description in a scrollable column
     selectQuest: (Quest?) -> Unit,
     isQuestSelected: () -> Boolean,
     quest: Quest?,
     calculateExp: (DifficultyEnum, Long) -> Long,
     getLevel: () -> Long
 ) {
-    Dialog(onDismissRequest = {
+    Dialog(onDismissRequest = {//dialog box created goes away when a quest is no longer selected
         selectQuest(null)
         isQuestSelected()
     }
     ) {
-//       (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(.5f)
-//        val dialogWindowProvider = LocalView.current.parent as? DialogWindowProvider
-//        dialogWindowProvider?.window?.setDimAmount(0.5f)
             Card(
                 modifier = Modifier
                     .padding(20.dp)
@@ -155,46 +152,44 @@ fun CardDescription(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    FlowColumn(
+                    FlowColumn(//flow column to allow for large descriptions to be displayed
                         modifier = Modifier
                             .fillMaxWidth()
                             .verticalScroll(rememberScrollState())
                             .weight(1f),
-//                        horizontalAlignment = Alignment.Start,
-
                         ) {
                         Text(
-                            quest!!.header,
+                            quest!!.header,//displays header
                             fontSize = 25.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)
+                        Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)//displays difficulty
 
-                        if (quest.date.isNotEmpty()) {
+                        if (quest.date.isNotEmpty()) {//checks if quest has a date
                             Text(
-                                text = "Date: ${quest.date}",
+                                text = "Date: ${quest.date}",//displays date
                                 modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                             )
                         }
 
-                        if (quest.time.isNotEmpty()) {
+                        if (quest.time.isNotEmpty()) {//checks if quest has a time
                             Text(
-                                text = "Time: ${quest.time}",
+                                text = "Time: ${quest.time}",//displays time
                                 modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                             )
                         }
 
                         Text(
-                            text = "+${calculateExp(quest.exp, getLevel())} Exp",
+                            text = "+${calculateExp(quest.exp, getLevel())} Exp",//displays exp awarded on quest completion
                             modifier = Modifier.padding(top = 5.dp, start = 5.dp),
                             color = Color(0xFFFF7700)
                         )
 
-                        if (quest.description.isNotEmpty()) {
+                        if (quest.description.isNotEmpty()) {//checks if quest has a description
                             Text(
-                                text = "Description: ${quest.description}",
+                                text = "Description: ${quest.description}",//displays description
                                 modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                             )
                         }
