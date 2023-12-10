@@ -25,74 +25,61 @@ class NewQuestViewModel : ViewModel() {
     val header: State<String> = _header
     private val _currentIndex: MutableState<Int> = mutableStateOf(0)
     val currentIndex: State<Int> = _currentIndex
-    fun setCategory(category: String) {
+    fun setCategory(category: String) { //function to set the category of new quest
         _category.value = category
     }
 
-    fun getCategory() : String {
+    fun getCategory() : String {//function to get the category of new quest
         return _category.value
     }
 
-    fun setDescription(description: String) {
+    fun setDescription(description: String) {//function to set the description of new quest
         _description.value = description
     }
 
-    fun getDescription() : String {
-        return _description.value
-    }
 
-    fun setDate(date: String) {
+    fun setDate(date: String) {//function to set the date of new quest
         _date.value = date
     }
 
-    fun getDate() : String {
-        return _date.value
-    }
 
-    fun setTime(time: String) {
+
+    fun setTime(time: String) {//function to set the time of new quest
         _time.value = time
     }
 
-    fun getTime() : String {
-        return _time.value
-    }
 
-    fun setExp(exp: DifficultyEnum) {
+
+    fun setExp(exp: DifficultyEnum) {//function to set the difficulty of new quest
         _exp.value = exp
     }
 
-    fun getExp() : DifficultyEnum {
+    fun getExp() : DifficultyEnum {//function to get the difficulty of new quest
         return _exp.value
     }
 
-    fun setStatus(status: StatusEnum) {
-        _status.value = status
-    }
 
-    fun getStatus(status: StatusEnum) : StatusEnum {
-        return _status.value
-    }
 
-    fun setHeader(header: String) {
+    fun setHeader(header: String) {//function to set the header of new quest
         _header.value = header
     }
 
-    fun getHeader() : String {
+    fun getHeader() : String {//function to get the header of new quest
         return _header.value
     }
 
 
 
-    fun validate(): Quest {
-        if(category.value.isEmpty()) {
+    fun validate(): Quest { //used to validate and determine what fields are required for the user to input
+        if(category.value.isEmpty()) { //checks if category was entered
             throw Exception("Category name needed")
         }
-        if(header.value.isEmpty()) {
+        if(header.value.isEmpty()) {//checks if header was entered
             throw Exception("Header needed")
         }
-        if(exp.value == DifficultyEnum.unassigned) {
+        if(exp.value == DifficultyEnum.unassigned) {//checks if difficulty was selected
             throw Exception("Difficulty needed")
         }
-        return Quest(0, category.value, description.value, date.value, time.value, exp.value, status.value, header.value)
+        return Quest(0, category.value, description.value, date.value, time.value, exp.value, status.value, header.value) //returns quest if it is valid
     }
 }

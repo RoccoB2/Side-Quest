@@ -27,7 +27,7 @@ import kotlin.math.pow
 class QuestListViewModel(app : Application): AndroidViewModel(app) {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf()) // holds the current list of pending quests
     private val filteredQuests: MutableState<List<Quest>> = mutableStateOf(listOf())
-    val quests: State<List<Quest>> = filteredQuests
+    val quests: State<List<Quest>> = filteredQuests//set to filter so when filter is applied the displayed list changes
 
     private val _selected: MutableState<Quest?> // holds the quest that has been selected in the quest list for the dialog box to display all quest details
     private val selectedQuest: State<Quest?>
@@ -41,13 +41,12 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
     private var pendingCount: MutableState<Int> = mutableStateOf(0) // integer that holds the current total of pending quests in the database
 
     private val currentDate: MutableState<String> = mutableStateOf("") // string to hold the current date for checking if an alarm should be displayed
-    var searchText: MutableState<String> = mutableStateOf("")
     init {
         // coroutine for pulling quests from database
         viewModelScope.launch{
             _quests.value = _repository.getQuests() // pulls all quests
             _quests.value = _quests.value.filter{ q -> q.status == StatusEnum.pending } // filters out all non-pending quests
-            filteredQuests.value = _quests.value
+            filteredQuests.value = _quests.value//initializes filter to the whole list
             pendingCount.value = _quests.value.size // updates count of total pending quests
             service.showNotification(pendingCount.value) // creates notification of total pending quests
             Log.d("something", "initial: ${_quests.value.size}")
@@ -59,15 +58,12 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
     }
     fun setFilteredQuest(filter: String){
         if(filter == ""){
-            filteredQuests.value = _quests.value
+            filteredQuests.value = _quests.value//filteredQuests set back to whole list when no filter is applied
         }else{
-            filteredQuests.value = _quests.value.filter{ q -> q.header.contains(filter) || q.category.contains(filter)}
+            filteredQuests.value = _quests.value.filter{ q -> q.header.contains(filter) || q.category.contains(filter)}//filters based on header and category
         }
     }
-    fun setSearch(text: String){
-        searchText.value = text
-        setFilteredQuest(searchText.value)
-    }
+
     // function to set alarm for added quest with a time constraint
     private fun setAlarm(quest: Quest) {
         val calendar = Calendar.getInstance() // gets instance of calender with today's date
@@ -189,19 +185,19 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         val levelDouble: Double = level.toDouble()
         return when(difficulty){
             DifficultyEnum.easy -> {
-                (3 * ((levelDouble).pow(0.7)) ).toLong()
+                (3 * ((levelDouble).pow(0.7)) ).toLong()//function for easy exp increases exponentially
             }
 
             DifficultyEnum.medium -> {
-                (5 * ((levelDouble).pow(0.7)) ).toLong()
+                (5 * ((levelDouble).pow(0.7)) ).toLong()//function for medium exp increases exponentially
             }
 
             DifficultyEnum.hard -> {
-                (9 * ((levelDouble).pow(0.7))).toLong()
+                (9 * ((levelDouble).pow(0.7))).toLong()//function for hard exp increases exponentially
             }
 
             else -> {
-                0
+                0 //this case will never happen but required to avoid error
             }
         }
     }

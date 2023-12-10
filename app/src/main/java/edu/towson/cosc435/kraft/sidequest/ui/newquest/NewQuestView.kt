@@ -50,21 +50,19 @@ fun NewQuestView(
     vm: NewQuestViewModel = viewModel(),
     onAddQuest: (Quest) -> Unit
 ) {
-        var validForm by remember { mutableStateOf(true) }
+        var validForm by remember { mutableStateOf(true) } //used to validate user input to verify required information is given
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
-                //state = rememberScrollState(),
-                //orientation = Orientation.Vertical)
         ){
-            Text(
+            Text( //title of the page
                 "Create New Quest",
                 fontSize = 25.sp,
                 modifier = Modifier.padding(25.dp)
             )
-            if(!validForm){
+            if(!validForm){ //displays if user tried to submit a new quest without all of the required information
                 Text(
                     "Please fill out all required fields",
                     color = Color(0xFFDE5454), // red
@@ -72,11 +70,11 @@ fun NewQuestView(
                     modifier = Modifier.padding(15.dp)
                 )
             }
-            OutlinedTextField(
-                value = vm.category.value,
-                onValueChange = vm::setCategory,
+            OutlinedTextField( //user inputs information into the text field to set category for their new quest
+                value = vm.category.value, //sets the value of the textfield to the category in the new quest view model
+                onValueChange = vm::setCategory, //updates the category in the new quest viewmodel to match user input
                 placeholder = {
-                    Text( "Category")
+                    Text( "Category") //placeholder (before user input this displays)
                 },
                 label = {
                     Text("Category (Required)")
@@ -84,11 +82,11 @@ fun NewQuestView(
                 singleLine = true,
                 modifier = Modifier.padding(10.dp)
             )
-            OutlinedTextField(
-                value = vm.header.value,
-                onValueChange = vm::setHeader,
+            OutlinedTextField(//user inputs information into the text field to set header for their new quest
+                value = vm.header.value, //sets the value of the textfield to the header in the new quest view model
+                onValueChange = vm::setHeader,//updates the header in the new quest viewmodel to match user input
                 placeholder = {
-                    Text( "Header")
+                    Text( "Header")//placeholder (before user input this displays)
                 },
                 label = {
                     Text("Header (Required)")
@@ -96,11 +94,11 @@ fun NewQuestView(
                 singleLine = true,
                 modifier = Modifier.padding(10.dp)
             )
-            OutlinedTextField(
-                value = vm.description.value,
-                onValueChange = vm::setDescription,
+            OutlinedTextField(//user inputs information into the text field to set description for their new quest
+                value = vm.description.value, //sets the value of the textfield to the description in the new quest view model
+                onValueChange = vm::setDescription,//updates the description in the new quest viewmodel to match user input
                 placeholder = {
-                    Text( "Description")
+                    Text( "Description")//placeholder (before user input this displays)
                 },
                 label = {
                     Text("Description")
@@ -120,7 +118,7 @@ fun NewQuestView(
             val datePicker = DatePickerDialog(
                 context,
                 { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-                    selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"
+                    selectedDateText = "${selectedMonth + 1}/$selectedDayOfMonth/$selectedYear"//this string makes the standard american format of a date mm/dd/yyyy
                 }, year, month, dayOfMonth
             )
             datePicker.datePicker.minDate = calendar.timeInMillis
@@ -131,7 +129,7 @@ fun NewQuestView(
             ) {
                 Button(
                     onClick = {
-                        datePicker.show()
+                        datePicker.show() //displays the datepicker(calender) when the button is clicked
                     },
                     modifier = Modifier.padding(bottom = 10.dp)
                 ) {
@@ -139,8 +137,8 @@ fun NewQuestView(
                 }
                 Text(
                     text = if (selectedDateText.isNotEmpty()) {
-                        vm.setDate(selectedDateText)
-                        "Date selected: $selectedDateText"
+                        vm.setDate(selectedDateText) //uses the new quest viewmodel function setDate to set the date to the selected date
+                        "Date selected: $selectedDateText" //displays the selected date string
                     } else{
                         ""
                     }
@@ -158,25 +156,25 @@ fun NewQuestView(
             val timePicker = TimePickerDialog(
                 context,
                 { _, selectedHour: Int, selectedMinute: Int ->
-                    hourSaved = if(selectedHour > 12){
+                    hourSaved = if(selectedHour > 12){ //converts from military time by subtracting 12 from the hours if hour is above 12
                         selectedHour - 12
                     } else {
-                        if(selectedHour == 0)
+                        if(selectedHour == 0) //if time is midnight set to 12 instead of 00
                             12
                         else
                             selectedHour
                     }
-                    minuteSaved = if(selectedMinute < 10){
+                    minuteSaved = if(selectedMinute < 10){ //makes it so that single digit minutes have a 0 in front of them so 12:01 reads 12:01 and not 12:1
                         "0$selectedMinute"
                     } else {
                         "$selectedMinute"
                     }
-                    ampmSaved = if(selectedHour >= 12){
+                    ampmSaved = if(selectedHour >= 12){ //if the hour is above or equal to 12 then we know we should use PM else AM
                         "PM"
                     } else {
                         "AM"
                     }
-                    selectedTimeText = "$hourSaved:$minuteSaved $ampmSaved"
+                    selectedTimeText = "$hourSaved:$minuteSaved $ampmSaved" //this string allows us to have a time that is not in military time
                 }, hour, minute, false
             )
             Column(
@@ -186,7 +184,7 @@ fun NewQuestView(
             ) {
                 Button(
                     onClick = {
-                        timePicker.show()
+                        timePicker.show()//displays the timepicker(clock) when the button is clicked
                     },
                     modifier = Modifier.padding(bottom = 10.dp)
                 ) {
@@ -194,8 +192,8 @@ fun NewQuestView(
                 }
                 Text(
                     text = if (selectedTimeText.isNotEmpty()) {
-                        vm.setTime(selectedTimeText)
-                        "Time selected: $selectedTimeText"
+                        vm.setTime(selectedTimeText)//uses the new quest viewmodel function setTime to set the date to the selected time
+                        "Time selected: $selectedTimeText"//displays the selectedtime string
                     } else {
                         ""
                     }
@@ -208,35 +206,35 @@ fun NewQuestView(
                 modifier = Modifier.padding(15.dp))
             Row {
                 Button(
-                    onClick = { vm.setExp(DifficultyEnum.easy) },
+                    onClick = { vm.setExp(DifficultyEnum.easy) }, //if button clicked sets new quest difficulty to easy
                     colors = ButtonDefaults.buttonColors(
                         if (vm.getExp() == DifficultyEnum.easy)
-                            Color(0xFF54DE79) // green
+                            Color(0xFF54DE79) //changes color to green for easy
                         else
-                            Color(0xFFA0A3A1)), // grey
+                            Color(0xFFA0A3A1)), //changes color to grey if not selected
                     modifier = Modifier.padding(10.dp)
                     )
                 {
                     Text("Easy")
                 }
                 Button(
-                    onClick = { vm.setExp(DifficultyEnum.medium) },
+                    onClick = { vm.setExp(DifficultyEnum.medium) },//if button clicked sets new quest difficulty to medium
                     colors = ButtonDefaults.buttonColors(
                         if (vm.getExp() == DifficultyEnum.medium)
-                            Color(0xFFDED754) // yellow
+                            Color(0xFFDED754) //changes color to yellow for medium
                         else
-                            Color(0xFFA0A3A1)), // grey
+                            Color(0xFFA0A3A1)), //changes color to grey if not selected
                     modifier = Modifier.padding(10.dp)
                 ) {
                     Text("Medium")
                 }
                 Button(
-                    onClick = { vm.setExp(DifficultyEnum.hard) },
+                    onClick = { vm.setExp(DifficultyEnum.hard) },//if button clicked sets new quest difficulty to hard
                         colors = ButtonDefaults.buttonColors(
                         if (vm.getExp() == DifficultyEnum.hard)
-                            Color(0xFFDE5454) // red
+                            Color(0xFFDE5454) //changes color to red for hard
                         else
-                            Color(0xFFA0A3A1)), // grey
+                            Color(0xFFA0A3A1)), //changes color to grey if not selected
                     modifier = Modifier.padding(10.dp)
                 ) {
                     Text("Hard")
@@ -245,9 +243,9 @@ fun NewQuestView(
             Button(
                 onClick = {
                     validForm = formValidate(vm)
-                    if(validForm){
+                    if(validForm){ //checks if newquest is valid (has required information) before submit is allowed
                         val quest = vm.validate()
-                        onAddQuest(quest)
+                        onAddQuest(quest) //adds quest to list
                     }
                     },
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
@@ -261,6 +259,6 @@ fun NewQuestView(
 
 }
 
-fun formValidate(vm: NewQuestViewModel) : Boolean {
+fun formValidate(vm: NewQuestViewModel) : Boolean { //validation function to determine what information is required of the user
     return (vm.getCategory() != "" && vm.getHeader() != "" && vm.getExp() != DifficultyEnum.unassigned)
 }

@@ -30,28 +30,28 @@ fun MainScreen() {
     val nav = rememberNavController()
     Scaffold (
         bottomBar = {
-            BottomNavBar(nav = nav)
+            BottomNavBar(nav = nav) //creates bottom bar displays at bottom of screen
         }
     ) {
-        QuestsNavGraph(nav)
+        QuestsNavGraph(nav) //navgraph call with navcontroller parameter
     }
 }
 
 @Composable
-private fun BottomNavBar(
+private fun BottomNavBar(//what displays in bottom bar
     nav: NavHostController
 ) {
     NavigationBar() {
         NavigationBarItem(
             selected = nav.currentBackStackEntry?.destination?.route == Routes.AddQuest.route,
             onClick = {
-                nav.navigate(Routes.Stats.route) {
-                    launchSingleTop = true
+                nav.navigate(Routes.Stats.route) {//navigation for stats page
+                    launchSingleTop = true //influences interaction between navigation and the phones back button back doesnt lead you back anf forth between pages
                     popUpTo(Routes.Stats.route)
                 }
             },
             icon = {
-                Icon(Icons.Default.Person, "", tint = MaterialTheme.colorScheme.secondary)
+                Icon(Icons.Default.Person, "", tint = MaterialTheme.colorScheme.secondary)//displays person icon
             },
             label = {
                 Text("Stats Page", color = MaterialTheme.colorScheme.secondary)
@@ -60,13 +60,13 @@ private fun BottomNavBar(
         NavigationBarItem(
             selected = nav.currentBackStackEntry?.destination?.route == Routes.QuestList.route,
             onClick = {
-                nav.navigate(Routes.QuestList.route) {
-                    launchSingleTop = true
+                nav.navigate(Routes.QuestList.route) {//navigation for questlist
+                    launchSingleTop = true//influences interaction between navigation and the phones back button back doesnt lead you back anf forth between pages
                     popUpTo(Routes.QuestList.route) { inclusive = true }
                 }
             },
             icon = {
-                Icon(Icons.Default.Home, "", tint = MaterialTheme.colorScheme.secondary)
+                Icon(Icons.Default.Home, "", tint = MaterialTheme.colorScheme.secondary)//home icon because its default screen
             },
             label = {
                 Text("Home", color = MaterialTheme.colorScheme.secondary)
@@ -75,13 +75,13 @@ private fun BottomNavBar(
         NavigationBarItem(
             selected = nav.currentBackStackEntry?.destination?.route == Routes.AddQuest.route,
             onClick = {
-                nav.navigate(Routes.AddQuest.route) {
-                    launchSingleTop = true
+                nav.navigate(Routes.AddQuest.route) {//navigation for addquest
+                    launchSingleTop = true//influences interaction between navigation and the phones back button back doesnt lead you back anf forth between pages
                     popUpTo(Routes.QuestList.route)
                 }
             },
             icon = {
-                Icon(Icons.Default.Add, "", tint = MaterialTheme.colorScheme.secondary)
+                Icon(Icons.Default.Add, "", tint = MaterialTheme.colorScheme.secondary)//add icon for add quest
             },
             label = {
                 Text("Add Quest", color = MaterialTheme.colorScheme.secondary)

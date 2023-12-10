@@ -59,10 +59,9 @@ fun QuestListView(
     getExpTillLevelUp: () -> Long,
     calculateExp: (DifficultyEnum, Long) -> Long,
     onFilterQuest: (String) -> Unit,
-    onSetSearch: (String) -> Unit
 ) {
-    var searching by remember { mutableStateOf(false) }
-    var searchText: String by remember { mutableStateOf("") }
+    var searching by remember { mutableStateOf(false) }//if true then search bar is displayed
+    var searchText: String by remember { mutableStateOf("") } //string that is used to filter quests
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -74,7 +73,7 @@ fun QuestListView(
                 .background(
                     Color.Black.copy(
                         alpha =
-                        if (isQuestSelected())
+                        if (isQuestSelected()) //changes color if quest is selected to display description
                             0.5f
                         else
                             0f
@@ -89,27 +88,27 @@ fun QuestListView(
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { searching = true }) {
+                    IconButton(onClick = { searching = true }) { //if clicked searching = true then search bar displays
                         Icon(
-                            imageVector = Icons.Filled.Search,
+                            imageVector = Icons.Filled.Search, //search icon
                             contentDescription = null
                         )
                     }
-                    if(searching) {
+                    if(searching) {//if statement to check if searching is true to display searchbar
                         OutlinedTextField(
-                            value = searchText,
+                            value = searchText,//sets value to the search filter variable searchText
                             onValueChange = {
-                                searchText = it
+                                searchText = it //searchText changes with user input
                             }
                         )
-                        onFilterQuest(searchText)
+                        onFilterQuest(searchText) //calls onFilterQuest to filter the List based on what is entered in the searchbar
                         IconButton(onClick = {
-                            searching = false
-                            searchText = ""
+                            searching = false //if back icon is clicked searchbar is no longer shown
+                            searchText = "" //rests searchText to empty string when back button is clicked
                             onFilterQuest(searchText)
                         }) {
                             Icon(
-                                imageVector = Icons.Filled.ArrowBack,
+                                imageVector = Icons.Filled.ArrowBack, //back icon display
                                 contentDescription = null
                             )
                         }
@@ -117,7 +116,7 @@ fun QuestListView(
                 }
 
             Text(
-                text ="Level: ${getLevel()}",
+                text ="Level: ${getLevel()}", //displays current level at top of screen from getlevel()
                 fontSize = 25.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -126,25 +125,25 @@ fun QuestListView(
             )
 
             Text(
-                text = "EXP: ${getCurrentExp()}/${getExpTillLevelUp()}",
+                text = "EXP: ${getCurrentExp()}/${getExpTillLevelUp()}",//displays currentexp over exp till level up through respective getters
                 fontSize = 15.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
 
             val config = LocalConfiguration.current
-            if (config.orientation == Configuration.ORIENTATION_PORTRAIT && quests.isNotEmpty()) {
+            if (config.orientation == Configuration.ORIENTATION_PORTRAIT && quests.isNotEmpty()) { //if quest are not empty then displays list of quests
                 LazyColumn() {
-                    items(quests) {quest ->
+                    items(quests) {quest -> //displays all quests in the form of cards from QuestRow
                         QuestRow(quest, onToggle, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest, calculateExp, getLevel)
                     }
                 }
-            } else {
-                if(searchText == ""){
-                    Card(
+            } else {//this is the case where there is no quests in list
+                if(searchText == ""){ //if there is no filter
+                    Card( //card is displayed when no quests and no filter
                         modifier = Modifier
                             .padding(20.dp)
-                            .clickable(onClick = {
+                            .clickable(onClick = { //when card is clicked onAddQuest() to navigate to add quest
                                 onAddQuest()
                             })
                             .fillMaxWidth()
@@ -160,7 +159,7 @@ fun QuestListView(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ){
                             Icon(
-                                Icons.Default.Add, "",
+                                Icons.Default.Add, "",//add icon displayed on card
                                 modifier = Modifier.size(50.dp)
                             )
                         }
@@ -173,7 +172,7 @@ fun QuestListView(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            "No Quests in Filter",
+                            "No Quests in Filter",//displays when there is a filter and there is no quests that match the filter
                             color = Color(0xFFDE5454)
                         )
                     }

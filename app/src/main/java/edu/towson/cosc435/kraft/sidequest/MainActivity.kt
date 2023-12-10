@@ -31,16 +31,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainScreen()//calls mainscreen
                 }
             }
         }
     }
 }
-enum class StatusEnum {
+enum class StatusEnum {//creation of status enum
     pass, fail, pending
 }
-enum class DifficultyEnum {
+enum class DifficultyEnum {//creation of difficulty enum
     easy, medium, hard, unassigned
 }
 

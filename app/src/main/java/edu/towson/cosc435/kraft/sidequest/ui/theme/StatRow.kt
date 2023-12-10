@@ -33,46 +33,40 @@ fun StatRow(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.scrim)
     ){
 
-        Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
+        Text(quest.header, fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )//displays header of the quest
         Row(
             modifier = Modifier.padding(start = 5.dp, end =5.dp, bottom = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Column() {
-//                Row(
-//                    modifier = Modifier.padding(5.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(quest.header, fontSize = 25.sp)
-//                }
                 Row(
                     modifier = Modifier.padding(top = 0.dp, start = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)
+                    Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)//displays difficulty of the quest
 
                 }
                 if (quest.date.isNotEmpty())
-                    Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                    Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))//displays date of the quest
                 if (quest.time.isNotEmpty())
-                    Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))
+                    Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))//displays time of the quest
 
             }
             Column() {
                 Row(
                     modifier = Modifier.padding(top = 30.dp)
                 ) {
-                    if(quest.status==StatusEnum.pass)
+                    if(quest.status==StatusEnum.pass)//checks if this quest is passed
                         Text(
-                            "PASS",
+                            "PASS",//displays pass on card in green
                             color = Color(0xFF15BD30), // green
                             fontSize = 15.sp,
                             modifier = Modifier.padding(15.dp)
                         )
-                    else
+                    else//if quest is failed
                         Text(
-                            "FAIL",
+                            "FAIL",//displays failed on card in red
                             color = Color(0xFFDF1D1D), // red
                             fontSize = 15.sp,
                             modifier = Modifier.padding(15.dp)
