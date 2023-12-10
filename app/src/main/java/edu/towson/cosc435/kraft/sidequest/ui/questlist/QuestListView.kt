@@ -72,12 +72,14 @@ fun QuestListView(
                 .fillMaxHeight()
                 .padding(bottom = 75.dp)
                 .background(
-                Color.Black.copy(alpha =
-            if(isQuestSelected())
-                0.5f
-            else
-                0f
-            ))
+                    Color.Black.copy(
+                        alpha =
+                        if (isQuestSelected())
+                            0.5f
+                        else
+                            0f
+                    )
+                )
         ) {
 
 
@@ -118,7 +120,9 @@ fun QuestListView(
                 text ="Level: ${getLevel()}",
                 fontSize = 25.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(top = 15.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 15.dp)
             )
 
             Text(
@@ -136,28 +140,45 @@ fun QuestListView(
                     }
                 }
             } else {
-                Card(
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .clickable(onClick = {
-                            onAddQuest()
-                        })
-                        .fillMaxWidth()
-                        .height(140.dp)
-                ){
-                    Text(text = "Add a quest", fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                            .fillMaxHeight()
-                            .padding(top = 15.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                if(searchText == ""){
+                    Card(
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .clickable(onClick = {
+                                onAddQuest()
+                            })
+                            .fillMaxWidth()
+                            .height(140.dp)
                     ){
-                        Icon(
-                            Icons.Default.Add, "",
-                            modifier = Modifier.size(50.dp)
+                        Text(text = "Add a quest", fontSize = 25.sp, textAlign = TextAlign.Center,modifier = Modifier.fillMaxWidth() )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(top = 15.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+                            Icon(
+                                Icons.Default.Add, "",
+                                modifier = Modifier.size(50.dp)
+                            )
+                        }
+                    }
+                }else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "No Quests in Filter",
+                            color = Color(0xFFDE5454)
                         )
                     }
+
                 }
+
             }
         }
     }

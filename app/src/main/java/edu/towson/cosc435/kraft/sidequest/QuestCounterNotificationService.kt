@@ -31,6 +31,7 @@ class QuestCounterNotificationService(private val context: Context) {
                 .setContentTitle("Quests Pending Count")
                 .setContentText("The total number of quests pending is $questCounter")
                 .setContentIntent(pendingIntent)
+                .setSilent(true)
                 .build()
 
             notificationManager.notify(1, notification)
@@ -40,6 +41,7 @@ class QuestCounterNotificationService(private val context: Context) {
                 .setContentTitle("Quests Pending Count")
                 .setContentText("You have no quest pending at the moment. Add a quest to hack a habit.")
                 .setContentIntent(pendingIntent)
+                .setSilent(true)
                 .build()
 
             notificationManager.notify(1, notification)

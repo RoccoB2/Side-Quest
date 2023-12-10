@@ -73,7 +73,6 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         val calendar = Calendar.getInstance() // gets instance of calender with today's date
         val context: Context = getApplication() // gets context for intent
         currentDate.value = "${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.YEAR)}" // formats calendars date to the date we use for quests
-
         // checks if the quest is due today or does not have a date due
         // all newly added quests with no due date AND A time due or considered due today
         // checks if there is a time due
@@ -161,6 +160,7 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         _quests.value = _quests.value.filter { q -> q.id != quest.id } // filters out all no pending quests
         pendingCount.value = _quests.value.size // updates count of pending quests
         service.showNotification(pendingCount.value) // sends new notification of pending quests
+        filteredQuests.value = filteredQuests.value.filter { q -> q.id != quest.id }
     }
 
     // function to update a quest when it has been passed or failed
