@@ -50,7 +50,11 @@ fun QuestsNavGraph(
                 calculateExp = vm::calculateExp,
                 getLevel = vm2::getlevel,
                 getCurrentExp = vm2::getCurrentExp,
-                getExpTillLevelUp = vm2::getExpTillLevelUp
+                getExpTillLevelUp = vm2::getExpTillLevelUp,
+                onFilterQuest = {
+                    vm.setFilteredQuest(it)
+                },
+                onSetSearch = vm::setSearch
             )
         }
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,13 +13,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +40,11 @@ import edu.towson.cosc435.kraft.sidequest.DifficultyEnum
 import edu.towson.cosc435.kraft.sidequest.StatusEnum
 import edu.towson.cosc435.kraft.sidequest.data.model.Quest
 import edu.towson.cosc435.kraft.sidequest.ui.theme.QuestRow
+import androidx.compose.material3.*
+import androidx.compose.ui.graphics.SolidColor
 import kotlin.reflect.KSuspendFunction1
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestListView(
     quests: List<Quest>,
@@ -45,8 +58,12 @@ fun QuestListView(
     getLevel: () -> Long,
     getCurrentExp: () -> Long,
     getExpTillLevelUp: () -> Long,
-    calculateExp: (DifficultyEnum, Long) -> Long
+    calculateExp: (DifficultyEnum, Long) -> Long,
+    onFilterQuest: (String) -> Unit,
+    onSetSearch: (String) -> Unit
 ) {
+    var searching by remember { mutableStateOf(false) }
+    var searchText: String by remember { mutableStateOf("") }
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -63,6 +80,36 @@ fun QuestListView(
                 0f
             ))
         ) {
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { searching = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null
+                        )
+                    }
+                    if(searching) {
+                        OutlinedTextField(
+                            value = searchText,
+                            onValueChange = {
+                                searchText = it
+                            }
+                        )
+                        onFilterQuest(searchText)
+                        IconButton(onClick = { searching = false }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
 
             Text(
                 text ="Level: ${getLevel()}",

@@ -4,9 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.provider.AlarmClock
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +26,8 @@ import kotlin.math.pow
 
 class QuestListViewModel(app : Application): AndroidViewModel(app) {
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf()) // holds the current list of pending quests
-    val quests: State<List<Quest>> = _quests
+    private val filteredQuests: MutableState<List<Quest>> = mutableStateOf(listOf())
+    val quests: State<List<Quest>> = filteredQuests
 
     private val _selected: MutableState<Quest?> // holds the quest that has been selected in the quest list for the dialog box to display all quest details
     private val selectedQuest: State<Quest?>
@@ -36,22 +41,33 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
     private var pendingCount: MutableState<Int> = mutableStateOf(0) // integer that holds the current total of pending quests in the database
 
     private val currentDate: MutableState<String> = mutableStateOf("") // string to hold the current date for checking if an alarm should be displayed
-
-
+    var searchText: MutableState<String> = mutableStateOf("")
     init {
         // coroutine for pulling quests from database
         viewModelScope.launch{
             _quests.value = _repository.getQuests() // pulls all quests
             _quests.value = _quests.value.filter{ q -> q.status == StatusEnum.pending } // filters out all non-pending quests
+            filteredQuests.value = _quests.value
             pendingCount.value = _quests.value.size // updates count of total pending quests
             service.showNotification(pendingCount.value) // creates notification of total pending quests
+            Log.d("something", "initial: ${_quests.value.size}")
         }
         _selected = mutableStateOf(null) // initializes selected quest to null
         selectedQuest = _selected
         _waiting = mutableStateOf(false) // initializes waiting to false
         waiting = _waiting
     }
-
+    fun setFilteredQuest(filter: String){
+        if(filter == ""){
+            filteredQuests.value = _quests.value
+        }else{
+            filteredQuests.value = _quests.value.filter{ q -> q.header.contains(filter) || q.category.contains(filter)}
+        }
+    }
+    fun setSearch(text: String){
+        searchText.value = text
+        setFilteredQuest(searchText.value)
+    }
     // function to set alarm for added quest with a time constraint
     private fun setAlarm(quest: Quest) {
         val calendar = Calendar.getInstance() // gets instance of calender with today's date
@@ -136,6 +152,7 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
             pendingCount.value = _quests.value.size // updates count of pending quests
             service.showNotification(pendingCount.value) // sends new notification of pending quests
             setAlarm(quest) // calls set alarm for the quest (sets alarm depending on if the quest meets certain criteria
+            filteredQuests.value = _quests.value
         }
     }
 
