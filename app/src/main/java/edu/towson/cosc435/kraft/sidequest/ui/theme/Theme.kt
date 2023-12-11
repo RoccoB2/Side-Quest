@@ -21,7 +21,7 @@ private val darkColorScheme = darkColorScheme(
     surface = WeirdGreen50,
     scrim = CardColorTheme
 )
-
+//Colors assigned to unused theme colors
 private val lightColorScheme = lightColorScheme(
     background = BackgroundLightTheme,
     primary = WeirdGreen50,
@@ -29,17 +29,6 @@ private val lightColorScheme = lightColorScheme(
     tertiary = Pink40,
     scrim = QuestCardColor,
     surface = WeirdGreen50
-
-
-
-    /* Other default colors to override
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
 
 @Composable
@@ -63,7 +52,7 @@ fun SideQuestTheme(
                 tertiary = Pink40,
                 scrim = QuestCardColor,
                 surface = WeirdGreen50)
-        }
+        } //this let us change the theme
 
         darkTheme -> darkColorScheme
         else -> lightColorScheme

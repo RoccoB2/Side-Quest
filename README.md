@@ -11,7 +11,9 @@ Side Quest is a stylized to-do list that is centered around completing quests fo
 * An "Add Quest" screen that allows users to customize each task they want to create
 * Each quest will have a Category, a Header, and a Difficulty
 * Users can also select a custom due date and time for each quest
+* The app will create an alarm for quests that you have due today
 * Additionally, users can enter a description that they can view on the Home page by pressing the quest itself
+* The app will send a notification with the total active quests
 * Three levels of difficulty to award more experience for completion
 * A "Home" screen to view all of the quests that are in progress
 * A "Stats Page" to view the user's stats, quest history, and level
