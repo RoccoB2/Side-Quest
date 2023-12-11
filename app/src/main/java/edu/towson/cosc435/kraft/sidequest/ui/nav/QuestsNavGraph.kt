@@ -32,7 +32,6 @@ fun QuestsNavGraph(
         composable(Routes.QuestList.route) {//navigation to the quest list page
             val quests by vm.quests //list of quests from the questlist viewmodel
             RequestPushNotificationPermissions() //request the user for permission to send push notifications
-            //RequestAlarmPermissions()//request the user for permission to access alarm app
             QuestListView( //calls QuestListView function in QuestListView.kt
                 quests,
                 onToggle = vm::toggleStatus, //sets onToggle to the Quest List view model function toggleStatus
@@ -89,20 +88,3 @@ fun RequestPushNotificationPermissions() { //function to request permission from
     }
 }
 
-//@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-//@OptIn(ExperimentalPermissionsApi::class)
-//@Composable
-//fun RequestAlarmPermissions() {
-//    val permissionState = rememberPermissionState(android.Manifest.permission.SET_ALARM)
-//    when(permissionState.status) {
-//        PermissionStatus.Granted -> {
-//
-//        }
-//        is PermissionStatus.Denied -> {
-//            LaunchedEffect(key1 = true) {
-//                permissionState.launchPermissionRequest()
-//            }
-//        }
-//    }
-//
-//}

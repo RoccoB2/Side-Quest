@@ -26,17 +26,20 @@ import kotlinx.coroutines.withContext
 import kotlin.math.pow
 
 class StatViewModel(app: Application): AndroidViewModel(app) {
+    //list of quests
     private val _quests: MutableState<List<Quest>> = mutableStateOf(listOf())
     val quest: State<List<Quest>> = _quests
 
     private val statRepos: IStatRepository = StatDatabaseRepository(getApplication())
-    private var stat: MutableState<Stats> = mutableStateOf(Stats(0, 0,0,0,0,0,0,0,0,0,0,0))
-
+    private var stat: MutableState<Stats> = mutableStateOf(Stats(0, 0,0,0,0,0,0,0,0,0,0,0))//initializes all stats to 0
+    //selected quest variables
     private val _selected: MutableState<Quest?>
     private val selectedQuest: State<Quest?>
+    //database for quests
     private val _repository: IQuestRepository = QuestDatabaseRepository(getApplication())
-
+    //database for stats
     private val levelRepos: ILevelSystem = LevelDatabaseRepository(getApplication())
+    //initializes level
     var level: MutableState<Level> = mutableStateOf(Level(0,1, 0, 5))
 
 
@@ -44,21 +47,25 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     private val waiting: State<Boolean>
 
     private val check: MutableState<Boolean>
-
+    //quote fetcher to pull inspirational quote
     private val quoteFetcher : IQuoteFetcher = QuoteFetcher()
     val quotes : MutableState<Quote?> = mutableStateOf(null)
+    //button click disables quote button when true
     var buttonClick : MutableState<Boolean> = mutableStateOf(false)
     init {
         viewModelScope.launch{
+            //initializes _quests to the database
             _quests.value = _repository.getQuests()
+            //filters _quests into only quests that are pending
             _quests.value = _quests.value.filter{ q -> q.status != StatusEnum.pending }
+            //initializes stats from database
             if(statRepos.getStats() == null){
                 statRepos.addStats()
                 stat.value = statRepos.getStats()
             } else {
                 stat.value = statRepos.getStats()
             }
-
+            //initializes level from database
             if(levelRepos.getLevel() == null){
                 levelRepos.addLevel(level.value)
                 level.value = levelRepos.getLevel()
@@ -72,21 +79,23 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         _selected = mutableStateOf(null)
         selectedQuest = _selected
     }
-
+    //adds quest to the stat list
     fun addQuest(quest: Quest) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _waiting.value = true
+                //sets quests to the quest database
                 _quests.value = _repository.getQuests()
+                //filters quest list to only pending quest
                 _quests.value = _quests.value.filter { q -> q.status != StatusEnum.pending }
                 _waiting.value = false
             }
         }
-        stat.value.totalQuests += 1
-        if(quest.status == StatusEnum.pass) {
+        stat.value.totalQuests += 1//increases total quests by 1
+        if(quest.status == StatusEnum.pass) {//checks if quest was passed
             // updates passed stats
-            stat.value.passedTotal += 1
-            stat.value.currentStreak += 1
+            stat.value.passedTotal += 1 //increases total passed quests by 1
+            stat.value.currentStreak += 1 //increaes current streak by 1
             if(stat.value.currentStreak > stat.value.longestStreak)
                 stat.value.longestStreak = stat.value.currentStreak
 
@@ -125,8 +134,8 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         }
         viewModelScope.launch {
             // update the statRepos value
-            statRepos.updateStats(stat.value)
-            stat.value = statRepos.getStats()
+            statRepos.updateStats(stat.value)//updates stat database
+            stat.value = statRepos.getStats()//sets stats to database
         }
     }
 
@@ -235,7 +244,7 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
     }
 
     fun buttonClicked() {
-        buttonClick.value = true//sets buttonclick to true so the get inspirational quote button locks
+        buttonClick.value = true//sets button click to true so the get inspirational quote button locks
     }
 
 

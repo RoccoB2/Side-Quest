@@ -1,6 +1,5 @@
 package edu.towson.cosc435.kraft.sidequest
 
-import android.util.Log
 import com.google.gson.Gson
 import edu.towson.cosc435.kraft.sidequest.data.model.Quote
 import kotlinx.coroutines.Dispatchers
