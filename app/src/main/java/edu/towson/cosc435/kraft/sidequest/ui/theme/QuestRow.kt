@@ -90,7 +90,10 @@ fun QuestRow(
                             .height(45.dp)
                     )
                     {
-                        Text("Pass")
+                        Text(
+                            text = "Pass",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
                     }
                     Button(//button to quest displayed in red
                         onClick = {//onclick creates a new quest set to the old one, passes the newquest onto the stats screen and deletes the old quest of the quest list
@@ -106,7 +109,10 @@ fun QuestRow(
                             .height(45.dp)
                     )
                     {
-                        Text("Fail")
+                        Text(
+                            text = "Fail",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
                     }
                 }
 

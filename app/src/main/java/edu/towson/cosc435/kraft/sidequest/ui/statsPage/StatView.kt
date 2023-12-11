@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -157,7 +158,10 @@ fun StatView(
                         },
                             enabled = !vm.buttonClick.value //disables button if clicked
                         ) {
-                            Text("Get Inspirational Quote")
+                            Text(
+                                text = "Get Inspirational Quote",
+                                color = MaterialTheme.colorScheme.secondary
+                                )
                         }
                         if(vm.buttonClick.value){
                             if(vm.quotes.value == null){

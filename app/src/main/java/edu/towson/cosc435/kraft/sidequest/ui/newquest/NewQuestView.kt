@@ -124,7 +124,10 @@ fun NewQuestView(
                     },
                     modifier = Modifier.padding(bottom = 10.dp)
                 ) {
-                    Text(text = "Select a date")
+                    Text(
+                        text = "Select a date",
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                 }
                 Text(
                     text = if (selectedDateText.isNotEmpty()) {
@@ -179,7 +182,10 @@ fun NewQuestView(
                     },
                     modifier = Modifier.padding(bottom = 10.dp)
                 ) {
-                    Text(text = "Select time")
+                    Text(
+                        text = "Select time",
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                 }
                 Text(
                     text = if (selectedTimeText.isNotEmpty()) {
@@ -206,7 +212,10 @@ fun NewQuestView(
                     modifier = Modifier.padding(10.dp)
                     )
                 {
-                    Text("Easy")
+                    Text(
+                        text = "Easy",
+                        color = MaterialTheme.colorScheme.secondary
+                        )
                 }
                 Button(
                     onClick = { vm.setExp(DifficultyEnum.medium) },//if button clicked sets new quest difficulty to medium
@@ -217,7 +226,10 @@ fun NewQuestView(
                             Color(0xFFA0A3A1)), //changes color to grey if not selected
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    Text("Medium")
+                    Text(
+                        text = "Medium",
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                 }
                 Button(
                     onClick = { vm.setExp(DifficultyEnum.hard) },//if button clicked sets new quest difficulty to hard
@@ -228,7 +240,10 @@ fun NewQuestView(
                             Color(0xFFA0A3A1)), //changes color to grey if not selected
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    Text("Hard")
+                    Text(
+                        text = "Hard",
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                 }
             }
             Button(
@@ -242,7 +257,10 @@ fun NewQuestView(
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                 modifier = Modifier.padding(top =10.dp, start =10.dp, end = 10.dp, bottom = 100.dp)
             ){
-                Text("Submit")
+                Text(
+                    text = "Submit",
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
 
