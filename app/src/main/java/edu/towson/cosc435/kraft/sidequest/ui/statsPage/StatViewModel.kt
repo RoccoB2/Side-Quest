@@ -182,17 +182,17 @@ class StatViewModel(app: Application): AndroidViewModel(app) {
         val levelDouble: Double = level.value.level.toDouble()
         when(difficulty){
             DifficultyEnum.easy -> {
-                level.value.currentExp += (3 * ((levelDouble).pow(0.7)) ).toLong() //function for easy exp added to current when easy quest is completed
+                level.value.currentExp += (3 * ((levelDouble).pow(0.9)) ).toLong() //function for easy exp added to current when easy quest is completed
                 checkLevelUp()//checks if level up should occur
             }
 
             DifficultyEnum.medium -> {
-                level.value.currentExp += (5 * ((levelDouble).pow(0.7)) ).toLong()//function for medium exp added to current when medium quest is completed
+                level.value.currentExp += (5 * ((levelDouble).pow(0.9)) ).toLong()//function for medium exp added to current when medium quest is completed
                 checkLevelUp()//checks if level up should occur
             }
 
             DifficultyEnum.hard -> {
-                level.value.currentExp += (9 * ((levelDouble).pow(0.7))).toLong()//function for hard exp added to current when hard quest is completed
+                level.value.currentExp += (8.5 * ((levelDouble).pow(0.9))).toLong()//function for hard exp added to current when hard quest is completed
                 checkLevelUp()//checks if level up should occur
             }
 

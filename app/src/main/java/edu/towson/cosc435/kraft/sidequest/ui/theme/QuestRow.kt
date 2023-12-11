@@ -36,10 +36,12 @@ fun QuestRow(
     isQuestSelected: () -> Boolean,
     getSelectedQuest: () -> Quest?,
     calculateExp: (DifficultyEnum, Long) -> Long,
-    getLevel: () -> Long
+    getLevel: () -> Long,
+    getCurrentExp: () -> Long,
+    getExpTillLevelUp: () -> Long,
 ) {
     if(isQuestSelected())
-        CardDescription(selectQuest, isQuestSelected, getSelectedQuest(), calculateExp, getLevel)//calls function for dialog if a quest in the list is clicked
+        CardDescription(selectQuest, isQuestSelected, getSelectedQuest(), calculateExp, getLevel, getCurrentExp, getExpTillLevelUp)//calls function for dialog if a quest in the list is clicked
     Card(
         modifier = Modifier
             .padding(20.dp)
@@ -57,19 +59,23 @@ fun QuestRow(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Column() {
-
+                Text(" Category: ${quest.category}")
                 Row(
                     modifier = Modifier.padding(top = 0.dp, start = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)//displays difficulty of the quest
-
                 }
                 if (quest.date.isNotEmpty())
                     Text(text ="Date: ${quest.date}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))//displays date of the quest
                 if (quest.time.isNotEmpty())
                     Text(text ="Time: ${quest.time}",modifier = Modifier.padding(top = 5.dp, start = 5.dp))//displays time of the quest
-                Text(text = "+${calculateExp(quest.exp, getLevel())} Exp", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))//displays amount of exp given on quest completion
+                if(calculateExp(quest.exp, getLevel()) + getCurrentExp() >= getExpTillLevelUp()){
+                    Text(text = "+${calculateExp(quest.exp, getLevel())} Exp (LEVEL UP)", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))//displays amount of exp given on quest completion
+                }
+                else{
+                    Text(text = "+${calculateExp(quest.exp, getLevel())} Exp", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))//displays amount of exp given on quest completion
+                }
 
             }
             Column() {
@@ -138,7 +144,9 @@ fun CardDescription(//dialog function that displays when a card is clicked, disp
     isQuestSelected: () -> Boolean,
     quest: Quest?,
     calculateExp: (DifficultyEnum, Long) -> Long,
-    getLevel: () -> Long
+    getLevel: () -> Long,
+    getCurrentExp: () -> Long,
+    getExpTillLevelUp: () -> Long,
 ) {
     Dialog(onDismissRequest = {//dialog box created goes away when a quest is no longer selected
         selectQuest(null)
@@ -170,7 +178,7 @@ fun CardDescription(//dialog function that displays when a card is clicked, disp
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
-
+                        Text("Category: ${quest.category}")
                         Text("Difficulty: ${getDifficulty(quest.exp)}", fontSize = 15.sp)//displays difficulty
 
                         if (quest.date.isNotEmpty()) {//checks if quest has a date
@@ -187,11 +195,12 @@ fun CardDescription(//dialog function that displays when a card is clicked, disp
                             )
                         }
 
-                        Text(
-                            text = "+${calculateExp(quest.exp, getLevel())} Exp",//displays exp awarded on quest completion
-                            modifier = Modifier.padding(top = 5.dp, start = 5.dp),
-                            color = Color(0xFFFF7700)
-                        )
+                        if(calculateExp(quest.exp, getLevel()) + getCurrentExp() >= getExpTillLevelUp()){
+                            Text(text = "+${calculateExp(quest.exp, getLevel())} Exp (LEVEL UP)", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))//displays amount of exp given on quest completion
+                        }
+                        else{
+                            Text(text = "+${calculateExp(quest.exp, getLevel())} Exp", modifier = Modifier.padding(top = 5.dp, start = 5.dp), color = Color(0xFFFF7700))//displays amount of exp given on quest completion
+                        }
 
                         if (quest.description.isNotEmpty()) {//checks if quest has a description
                             Text(

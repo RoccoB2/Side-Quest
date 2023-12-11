@@ -182,15 +182,15 @@ class QuestListViewModel(app : Application): AndroidViewModel(app) {
         val levelDouble: Double = level.toDouble()
         return when(difficulty){
             DifficultyEnum.easy -> {
-                (3 * ((levelDouble).pow(0.7)) ).toLong()//function for easy exp increases exponentially
+                (3 * ((levelDouble).pow(0.9)) ).toLong()//function for easy exp increases exponentially
             }
 
             DifficultyEnum.medium -> {
-                (5 * ((levelDouble).pow(0.7)) ).toLong()//function for medium exp increases exponentially
+                (5 * ((levelDouble).pow(0.9)) ).toLong()//function for medium exp increases exponentially
             }
 
             DifficultyEnum.hard -> {
-                (9 * ((levelDouble).pow(0.7))).toLong()//function for hard exp increases exponentially
+                (8.5 * ((levelDouble).pow(0.9))).toLong()//function for hard exp increases exponentially
             }
 
             else -> {

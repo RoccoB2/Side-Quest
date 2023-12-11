@@ -126,7 +126,7 @@ fun QuestListView(
             if (config.orientation == Configuration.ORIENTATION_PORTRAIT && quests.isNotEmpty()) { //if quest are not empty then displays list of quests
                 LazyColumn() {
                     items(quests) {quest -> //displays all quests in the form of cards from QuestRow
-                        QuestRow(quest, onToggle, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest, calculateExp, getLevel)
+                        QuestRow(quest, onToggle, onPassQuest, onDeleteQuest, selectQuest, isQuestSelected, getSelectedQuest, calculateExp, getLevel, getCurrentExp,getExpTillLevelUp)
                     }
                 }
             } else {//this is the case where there is no quests in list
